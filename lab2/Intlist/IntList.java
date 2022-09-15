@@ -84,7 +84,7 @@ public class IntList {
         //TODO:  fill in method
         IntList p = new IntList(0, A);
         IntList l = p;
-        while(p.rest != null){
+        while (p.rest != null){
             p = p.rest;
         }
         p.rest = B;
@@ -99,12 +99,12 @@ public class IntList {
 //        TODO:  fill in method
         IntList rst = new IntList(0, null);
         IntList ptr = rst;
-        while(A != null){
+        while (A != null){
             ptr.rest = new IntList(A.first, null);
             A = A.rest;
             ptr = ptr.rest;
         }
-        while(B != null){
+        while (B != null){
             ptr.rest = new IntList(B.first, null);
             B = B.rest;
             ptr = ptr.rest;

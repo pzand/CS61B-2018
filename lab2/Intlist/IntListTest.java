@@ -68,8 +68,8 @@ public class IntListTest {
     @Test
     public void testDca(){
         IntList A = null;
-        IntList B = IntList.of(1,2,3);
-        IntList C = IntList.of(1,2,3);
+        IntList B = IntList.of(1, 2, 3);
+        IntList C = IntList.of(1, 2, 3);
         assertEquals(C, IntList.dcatenate(A, B));
     }
 }
