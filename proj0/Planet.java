@@ -10,7 +10,7 @@ public class Planet {
         xxPos = xP; yyPos = yP;
         xxVel = xV; yyVel = yV;
         mass = m;
-        imgFileName = img;
+        imgFileName = "./images/" + img;
     }
     public Planet(Planet P){
         this.xxPos = P.xxPos; this.yyPos = P.yyPos;
@@ -74,5 +74,8 @@ public class Planet {
         //calculate the new position
         this.xxPos = this.xxPos + this.xxVel * time;
         this.yyPos = this.yyPos + this.yyVel * time;
+    }
+    public void draw(){
+        StdDraw.picture(this.xxPos, this.yyPos, this.imgFileName);
     }
 }
