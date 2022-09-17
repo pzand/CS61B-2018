@@ -1,5 +1,5 @@
 public class Planet {
-    public static double Gravitaional = 6.67e-11;
+    private static double Gravitaional = 6.67e-11;
     public double xxPos;       //its current x position
     public double yyPos;       //its current y position
     public double xxVel;       //its current velocity in x position
@@ -19,7 +19,7 @@ public class Planet {
         this.imgFileName = P.imgFileName;
     }
     //To compare two planets is equals
-    public Boolean equals(Planet p){
+    private Boolean equals(Planet p){
         return this == p;
     }
     //calculate the distance between two Planet
