@@ -1,5 +1,5 @@
 public class NBody {
-    private static Double readRadius(String fileName) {
+    public static Double readRadius(String fileName) {
         In file = new In(fileName);
         file.readInt();
         return file.readDouble();
