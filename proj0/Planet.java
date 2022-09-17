@@ -10,7 +10,7 @@ public class Planet {
         xxPos = xP; yyPos = yP;
         xxVel = xV; yyVel = yV;
         mass = m;
-        imgFileName = "./images/" + img;
+        imgFileName = img;
     }
     public Planet(Planet P){
         this.xxPos = P.xxPos; this.yyPos = P.yyPos;
