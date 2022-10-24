@@ -13,7 +13,7 @@ public class NBody {
         Planet[] planets = new Planet[n];
         for (int i = 0; i < n; i++) {
             planets[i] = new Planet(file.readDouble(), file.readDouble(), file.readDouble(),
-                    file.readDouble(), file.readDouble(), file.readString());
+                    file.readDouble(), file.readDouble(),"./images/" + file.readString());
         }
         return planets;
     }
@@ -34,7 +34,6 @@ public class NBody {
             p.draw();
         }
         StdDraw.show();
-
         for (double nowtime = 0; nowtime < T; nowtime += dt) {
             double[] xForce = new double[planets.length];
             double[] yForce = new double[planets.length];
@@ -55,12 +54,12 @@ public class NBody {
             StdDraw.pause(1);
         }
 
-        StdOut.printf("%d\n", planets.length);
-        StdOut.printf("%.2e\n", radius);
-        for (int i = 0; i < planets.length; i++) {
-            StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
-                    planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
-                    planets[i].yyVel, planets[i].mass, planets[i].imgFileName);
-        }
+//        StdOut.printf("%d\n", planets.length);
+//        StdOut.printf("%.2e\n", radius);
+//        for (int i = 0; i < planets.length; i++) {
+//            StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+//                    planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
+//                    planets[i].yyVel, planets[i].mass, planets[i].imgFileName);
+//        }
     }
 }
