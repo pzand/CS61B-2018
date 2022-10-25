@@ -1,8 +1,10 @@
-public class ArrayDeque<T> implements Deque<T>{
-    /** Add and remoove must take constant time, except during resizing operations
+public class ArrayDeque<T> implements Deque<T> {
+    /**
+     * Add and remoove must take constant time, except during resizing operations
      * get and size must take constant time
      * The starting size of your array should be 8
      * The amount of memory that your program uses at any given time must be proportional to the number of items
+     *
      * @param item
      */
     private int size;
@@ -47,7 +49,7 @@ public class ArrayDeque<T> implements Deque<T>{
 
     @Override
     public void printDeque() {
-        for(int i = 1, num = this.nextFirst;i <= this.size;i++) {
+        for (int i = 1, num = this.nextFirst; i <= this.size; i++) {
             num = resizingToZeroOrLength(num + 1);
             System.out.print(arr[num] + " ");
         }
@@ -55,7 +57,7 @@ public class ArrayDeque<T> implements Deque<T>{
 
     @Override
     public T removeFirst() {
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             return null;
         }
         this.size--;
@@ -65,7 +67,7 @@ public class ArrayDeque<T> implements Deque<T>{
 
     @Override
     public T removeLast() {
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             return null;
         }
         this.size--;
@@ -75,31 +77,31 @@ public class ArrayDeque<T> implements Deque<T>{
 
     @Override
     public T get(int index) {
-        if(this.size < index) {
+        if (this.size < index) {
             return null;
-        }else{
+        } else {
             int new_index = resizingToZeroOrLength(this.nextFirst + index);
             return arr[new_index];
         }
     }
 
-    public int resizingToZeroOrLength(int num){
+    public int resizingToZeroOrLength(int num) {
         return (num + arr.length) % arr.length;
     }
 
-    private void resizingArr(){
-        this.R = (double)this.size / this.arr.length;
+    private void resizingArr() {
+        this.R = (double) this.size / this.arr.length;
         T[] arr2;
 
-        if(R >= 0.99){
+        if (R >= 0.99) {
             arr2 = (T[]) new Object[this.arr.length * 2];
         } else if (R <= 0.25 && arr.length > 8) {
             arr2 = (T[]) new Object[this.arr.length / 2];
-        }else {
+        } else {
             return;
         }
         int new_first = 0, old_first;
-        for(int i = 1;i <= this.size;i++){
+        for (int i = 1; i <= this.size; i++) {
             new_first = (nextFirst + i + arr.length) % arr2.length;
             old_first = (nextFirst + i) % arr.length;
             arr2[new_first] = arr[old_first];

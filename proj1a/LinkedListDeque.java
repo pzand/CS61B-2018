@@ -1,4 +1,4 @@
-public class LinkedListDeque<T> implements Deque<T>{
+public class LinkedListDeque<T> implements Deque<T> {
     /* Add and Remove operations must not involve any looping and recursion
      * Get must use iteration, not recursion
      * Size must take constant time*/
@@ -16,11 +16,13 @@ public class LinkedListDeque<T> implements Deque<T>{
         private final T item;
         private LinkedList front;
         private LinkedList next;
+
         public LinkedList(T item, LinkedList nextItem) {
             this.item = item;
             this.next = nextItem;
         }
     }
+
     @Override
     public void addFirst(T item) {
         this.size++;
@@ -54,7 +56,7 @@ public class LinkedListDeque<T> implements Deque<T>{
     @Override
     public void printDeque() {
         LinkedList p1 = this.sentinel.next;
-        for(int i = 0;i < size;i++){
+        for (int i = 0; i < size; i++) {
             System.out.print(p1.item + " ");
             p1 = p1.next;
         }
@@ -62,53 +64,53 @@ public class LinkedListDeque<T> implements Deque<T>{
 
     @Override
     public T removeFirst() {
-        if(!this.isEmpty()){
+        if (!this.isEmpty()) {
             this.size--;
             LinkedList p1 = this.sentinel.next;
             this.sentinel.next = p1.next;
             p1.next.front = this.sentinel;
             return (T) p1.item;
-        }else{
+        } else {
             return null;
         }
     }
 
     //    @Override
     public T removeLast() {
-        if(!this.isEmpty()){
+        if (!this.isEmpty()) {
             this.size--;
             LinkedList p1 = this.sentinel.front;
             p1.front.next = this.sentinel;
             this.sentinel.front = p1.front;
             return (T) p1.item;
-        }else{
+        } else {
             return null;
         }
     }
 
-        @Override
+    @Override
     public T get(int index) {
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             return null;
         }
         LinkedList p1 = this.sentinel;
-        for(int i = 0;i < size;i++){
+        for (int i = 0; i < size; i++) {
             p1 = p1.next;
         }
         return (T) p1.item;
     }
 
-    private T getRecursive(int index, LinkedList<T> p){
-        if(index == 0){
+    private T getRecursive(int index, LinkedList<T> p) {
+        if (index == 0) {
             return p.item;
         }
         return (T) getRecursive(index - 1, p.next);
     }
 
-    public T getRecursive(int index){
-        if(this.isEmpty() || index <= 0 || index > this.size){
+    public T getRecursive(int index) {
+        if (this.isEmpty() || index <= 0 || index > this.size) {
             return null;
-        }else{
+        } else {
             return (T) getRecursive(index - 1, this.sentinel.next);
         }
     }

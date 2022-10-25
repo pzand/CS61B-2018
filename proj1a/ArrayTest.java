@@ -1,4 +1,5 @@
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class ArrayTest {
@@ -21,7 +22,7 @@ public class ArrayTest {
         a.addFirst(7);
         assertArrayEquals(new Integer[]{1, null, null, null, null, null, 7, 8}, a.arr);
         assertEquals(3, a.size());
-        assertEquals((Integer)7, a.get(1));
+        assertEquals((Integer) 7, a.get(1));
         a.addLast(2);
         assertArrayEquals(new Integer[]{1, 2, null, null, null, null, 7, 8}, a.arr);
         a.addLast(3);
@@ -30,10 +31,10 @@ public class ArrayTest {
         assertArrayEquals(new Integer[]{1, 2, 3, null, null, 6, 7, 8}, a.arr);
         assertEquals(6, a.size());
         assertFalse(a.isEmpty());
-        assertEquals((Integer)6, a.get(1));
-        assertEquals((Integer)1, a.get(4));
-        assertEquals((Integer)2, a.get(5));
-        assertEquals((Integer)3, a.get(6));
+        assertEquals((Integer) 6, a.get(1));
+        assertEquals((Integer) 1, a.get(4));
+        assertEquals((Integer) 2, a.get(5));
+        assertEquals((Integer) 3, a.get(6));
 
         assertEquals((Integer) 6, a.removeFirst());
         assertEquals((Integer) 7, a.removeFirst());
