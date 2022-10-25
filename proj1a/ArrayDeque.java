@@ -5,11 +5,20 @@ public class ArrayDeque<T> implements Deque<T>{
      * The amount of memory that your program uses at any given time must be proportional to the number of items
      * @param item
      */
-    private int size = 0;
-    private int nextLast = 1;
-    private int nextFirst = 0;
-    private double R = 0;
-    public T[] arr = (T[]) new Object[8];
+    private int size;
+    private int nextLast;
+    private int nextFirst;
+    private double R;
+    public T[] arr;
+
+    public ArrayDeque() {
+        arr = (T[]) new Object[8];
+        R = 0;
+        size = 0;
+        nextLast = 1;
+        nextFirst = 0;
+    }
+
     @Override
     public void addFirst(T item) {
         this.size++;

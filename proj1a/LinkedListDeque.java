@@ -98,18 +98,18 @@ public class LinkedListDeque<T> implements Deque<T>{
         return (T) p1.item;
     }
 
-    private T getRecursion(int index, LinkedList<T> p){
+    private T getRecursive(int index, LinkedList<T> p){
         if(index == 0){
             return p.item;
         }
-        return (T) getRecursion(index - 1, p.next);
+        return (T) getRecursive(index - 1, p.next);
     }
 
-    public T getRecursion(int index){
+    public T getRecursive(int index){
         if(this.isEmpty() || index <= 0 || index > this.size){
             return null;
         }else{
-            return (T) getRecursion(index - 1, this.sentinel.next);
+            return (T) getRecursive(index - 1, this.sentinel.next);
         }
     }
 }
