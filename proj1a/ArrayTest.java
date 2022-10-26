@@ -59,8 +59,28 @@ public class ArrayTest {
 //    }
 
     public static void main(String[] args) {
-        ArrayDeque<Integer> a = new ArrayDeque<>();
-        a.addFirst(123);
-        System.out.println(a.get(1));
+        ArrayDeque<Integer> aArrayDeque = new ArrayDeque<>();
+        aArrayDeque.addLast(0);
+        aArrayDeque.addFirst(1);
+        aArrayDeque.get(1)      ;   //   ==> 0
+        aArrayDeque.removeLast() ;  //   ==> 0
+        aArrayDeque.removeFirst() ; //   ==> 1
+        aArrayDeque.addLast(5);
+        aArrayDeque.addFirst(6);
+        aArrayDeque.removeLast();  //    ==> 5
+        aArrayDeque.addLast(8);
+        aArrayDeque.removeFirst(); //    ==> 6
+        aArrayDeque.addLast(10);
+        aArrayDeque.addLast(11);
+        aArrayDeque.removeFirst(); //    ==> 8
+        aArrayDeque.addLast(13);
+        aArrayDeque.addLast(14);
+        aArrayDeque.addFirst(15);
+        aArrayDeque.addLast(16);
+        aArrayDeque.addLast(17);
+        aArrayDeque.addFirst(18);
+//        aArrayDeque.printDeque();
+        int a = aArrayDeque.removeLast();
+//        System.out.println(a);
     }
 }

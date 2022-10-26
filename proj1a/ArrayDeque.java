@@ -24,17 +24,17 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public void addFirst(T item) {
         this.size++;
-        arr[this.nextFirst] = item;
+        arr[this.nextFirst] = item;resizingArr();
         this.nextFirst = resizingToZeroOrLength(--this.nextFirst);
-        resizingArr();
+
     }
 
     @Override
     public void addLast(T item) {
         this.size++;
-        arr[this.nextLast] = item;
+        arr[this.nextLast] = item;resizingArr();
         this.nextLast = resizingToZeroOrLength(++this.nextLast);
-        resizingArr();
+
     }
 
     @Override
