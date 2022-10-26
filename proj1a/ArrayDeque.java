@@ -11,7 +11,7 @@ public class ArrayDeque<T> implements Deque<T> {
     private int nextLast;
     private int nextFirst;
     private double R;
-    public T[] arr;
+    private T[] arr;
 
     public ArrayDeque() {
         arr = (T[]) new Object[8];
@@ -39,7 +39,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public boolean isEmpty() {
-        return (this.nextLast - this.nextFirst) == 1;
+        return this.size == 0;
     }
 
     @Override
@@ -77,15 +77,15 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (this.size < index) {
+        if (this.size < index || index < 0) {
             return null;
         } else {
-            int new_index = resizingToZeroOrLength(this.nextFirst + index);
+            int new_index = resizingToZeroOrLength(this.nextFirst + index + 1);
             return arr[new_index];
         }
     }
 
-    public int resizingToZeroOrLength(int num) {
+    private int resizingToZeroOrLength(int num) {
         return (num + arr.length) % arr.length;
     }
 
@@ -100,6 +100,7 @@ public class ArrayDeque<T> implements Deque<T> {
         } else {
             return;
         }
+
         int new_first = 0, old_first;
         for (int i = 1; i <= this.size; i++) {
             new_first = (nextFirst + i + arr.length) % arr2.length;
