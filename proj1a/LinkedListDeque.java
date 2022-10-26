@@ -90,7 +90,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (index < 0 || this.size < index - 1) {
+        if (this.isEmpty() || index < 0 || this.size < index - 1) {
             return null;
         }
         LinkedList p1 = this.sentinel;
@@ -108,10 +108,10 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     public T getRecursive(int index) {
-        if (this.isEmpty() || index <= 0 || index > this.size) {
+        if (this.isEmpty() || index < 0 || index > this.size - 1) {
             return null;
         } else {
-            return (T) getRecursive(index - 1, this.sentinel.next);
+            return (T) getRecursive(index, this.sentinel.next);
         }
     }
 }
