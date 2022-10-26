@@ -1,8 +1,8 @@
-//import org.junit.*;
-//
-//import static org.junit.Assert.*;
-//
-//public class ArrayTest {
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+public class ArrayTest {
 //    @Test
 //    public void TestResizeToZeroOrLength() {
 //        ArrayDeque<Integer> a = new ArrayDeque<>();
@@ -57,16 +57,10 @@
 //        assertEquals((Integer) 22, a.removeFirst());
 //        assertEquals((Integer) 99, a.removeLast());
 //    }
-//
-//    public static void main(String[] args) {
-//        ArrayDeque<Integer> a = new ArrayDeque<>();
-//        a.addFirst(123);
-//        a.addLast(23);
-//        a.addFirst(234);
-//        a.addLast(34);
-//        a.addFirst(345);
-//        a.addLast(999);
-//        a.addFirst(0);
-//        a.printDeque();
-//    }
-//}
+
+    public static void main(String[] args) {
+        ArrayDeque<Integer> a = new ArrayDeque<>();
+        a.addFirst(123);
+        System.out.println(a.get(1));
+    }
+}
