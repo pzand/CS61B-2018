@@ -90,7 +90,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (this.isEmpty()) {
+        if (index < 0 || this.size < index - 1) {
             return null;
         }
         LinkedList p1 = this.sentinel;

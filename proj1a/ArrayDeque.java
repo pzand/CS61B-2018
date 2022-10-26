@@ -77,7 +77,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (this.size < index || index < 0) {
+        if (this.size < index - 1 || index < 0) {
             return null;
         } else {
             int new_index = resizingToZeroOrLength(this.nextFirst + index + 1);
