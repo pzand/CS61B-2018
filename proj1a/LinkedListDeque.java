@@ -1,4 +1,4 @@
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> {
     /**
      * Add and Remove operations must not involve any looping and recursion
      * Get must use iteration, not recursion
@@ -25,7 +25,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
+//    @Override
     public void addFirst(T item) {
         this.size++;
         LinkedList p1 = this.sentinel;
@@ -35,7 +35,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         p2.front = p1;
     }
 
-    @Override
+//    @Override
     public void addLast(T item) {
         this.size++;
         LinkedList p1 = this.sentinel;
@@ -45,17 +45,17 @@ public class LinkedListDeque<T> implements Deque<T> {
         p1.front = p2;
     }
 
-    @Override
+//    @Override
     public boolean isEmpty() {
         return this.size == 0;
     }
 
-    @Override
+//    @Override
     public int size() {
         return this.size;
     }
 
-    @Override
+//    @Override
     public void printDeque() {
         LinkedList p1 = this.sentinel.next;
         for (int i = 0; i < size; i++) {
@@ -64,7 +64,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
+//    @Override
     public T removeFirst() {
         if (!this.isEmpty()) {
             this.size--;
@@ -90,7 +90,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
+//    @Override
     public T get(int index) {
         if (this.isEmpty() || index < 0 || this.size < index - 1) {
             return null;

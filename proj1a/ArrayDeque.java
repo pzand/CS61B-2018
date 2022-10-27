@@ -1,4 +1,4 @@
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> {
     /**
      * Add and remoove must take constant time, except during resizing operations
      * get and size must take constant time
@@ -22,7 +22,7 @@ public class ArrayDeque<T> implements Deque<T> {
         nextFirst = 0;
     }
 
-    @Override
+//    @Override
     public void addFirst(T item) {
         this.size++;
         arr[this.nextFirst] = item;
@@ -30,7 +30,7 @@ public class ArrayDeque<T> implements Deque<T> {
         resizingArr();
     }
 
-    @Override
+//    @Override
     public void addLast(T item) {
         this.size++;
         arr[this.nextLast] = item;
@@ -38,17 +38,17 @@ public class ArrayDeque<T> implements Deque<T> {
         resizingArr();
     }
 
-    @Override
+//    @Override
     public boolean isEmpty() {
         return this.size == 0;
     }
 
-    @Override
+//    @Override
     public int size() {
         return this.size;
     }
 
-    @Override
+//    @Override
     public void printDeque() {
         for (int i = 1, num = this.nextFirst; i <= this.size; i++) {
             num = resizingToZeroOrLength(num + 1);
@@ -56,7 +56,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
+//    @Override
     public T removeFirst() {
         if (this.isEmpty()) {
             return null;
@@ -68,7 +68,7 @@ public class ArrayDeque<T> implements Deque<T> {
         return a;
     }
 
-    @Override
+//    @Override
     public T removeLast() {
         if (this.isEmpty()) {
             return null;
@@ -80,13 +80,13 @@ public class ArrayDeque<T> implements Deque<T> {
         return a;
     }
 
-    @Override
+//    @Override
     public T get(int index) {
         if (this.size < index - 1 || index < 0) {
             return null;
         } else {
-            int new_index = resizingToZeroOrLength(this.nextFirst + index + 1);
-            return arr[new_index];
+            index = resizingToZeroOrLength(this.nextFirst + index + 1);
+            return arr[index];
         }
     }
 
