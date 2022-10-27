@@ -79,8 +79,9 @@ public class ArrayTest {
         aArrayDeque.addLast(16);
         aArrayDeque.addLast(17);
         aArrayDeque.addFirst(18);
-//        aArrayDeque.printDeque();
-        int a = aArrayDeque.removeLast();
-//        System.out.println(a);
+        aArrayDeque.printDeque();
+        System.out.println();
+        System.out.println(aArrayDeque.removeLast());
+        System.out.println(aArrayDeque.removeFirst());
     }
 }

@@ -3,7 +3,8 @@ public class ArrayDeque<T> implements Deque<T> {
      * Add and remoove must take constant time, except during resizing operations
      * get and size must take constant time
      * The starting size of your array should be 8
-     * The amount of memory that your program uses at any given time must be proportional to the number of items
+     * The amount of memory that your program uses at any given time
+     *      must be proportional to the number of items
      *
      * @param item
      */
@@ -24,17 +25,17 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public void addFirst(T item) {
         this.size++;
-        arr[this.nextFirst] = item;resizingArr();
+        arr[this.nextFirst] = item;
         this.nextFirst = resizingToZeroOrLength(--this.nextFirst);
-
+        resizingArr();
     }
 
     @Override
     public void addLast(T item) {
         this.size++;
-        arr[this.nextLast] = item;resizingArr();
+        arr[this.nextLast] = item;
         this.nextLast = resizingToZeroOrLength(++this.nextLast);
-
+        resizingArr();
     }
 
     @Override
@@ -62,6 +63,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.size--;
         this.nextFirst = resizingToZeroOrLength(++this.nextFirst);
+        resizingArr();
         return this.arr[this.nextFirst];
     }
 
@@ -72,6 +74,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.size--;
         this.nextLast = resizingToZeroOrLength(--this.nextLast);
+        resizingArr();
         return this.arr[this.nextLast];
     }
 
@@ -101,13 +104,12 @@ public class ArrayDeque<T> implements Deque<T> {
             return;
         }
 
-        int new_first = 0, old_first;
-        for (int i = 1; i <= this.size; i++) {
-            new_first = (nextFirst + i + arr.length) % arr2.length;
-            old_first = (nextFirst + i) % arr.length;
-            arr2[new_first] = arr[old_first];
+        for (int i = 1, num = this.nextFirst; i <= this.size; i++) {
+            num = resizingToZeroOrLength(num + 1);
+            arr2[i] = arr[num];
         }
-        this.nextFirst = new_first + arr.length;
+        this.nextFirst = 0;
+        this.nextLast = this.size + 1;
         arr = arr2;
     }
 }
