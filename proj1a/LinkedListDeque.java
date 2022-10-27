@@ -93,8 +93,8 @@ public class LinkedListDeque<T> implements Deque<T> {
         if (this.isEmpty() || index < 0 || this.size < index - 1) {
             return null;
         }
-        LinkedList p1 = this.sentinel;
-        for (int i = 0; i < size; i++) {
+        LinkedList p1 = this.sentinel.next;
+        for (int i = 0; i < index; i++) {
             p1 = p1.next;
         }
         return (T) p1.item;

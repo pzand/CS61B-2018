@@ -59,28 +59,12 @@ public class ArrayTest {
 //    }
 
     public static void main(String[] args) {
-        ArrayDeque<Integer> aArrayDeque = new ArrayDeque<>();
-        aArrayDeque.addLast(0);
-        aArrayDeque.get(0)     ;// ==> 0
-        aArrayDeque.addLast(2);
-        aArrayDeque.addFirst(3);
-        aArrayDeque.addFirst(4);
-        aArrayDeque.addFirst(5);
-        aArrayDeque.addFirst(6);
-        aArrayDeque.get(5);      //==> 2
-        aArrayDeque.get(4) ;     //==> 0
-        aArrayDeque.removeLast();  //    ==> 2
-        aArrayDeque.get(1);    //  ==> 5
-        aArrayDeque.addFirst(11);
-        aArrayDeque.addFirst(12);
-        aArrayDeque.get(3);      //==> 5
-        aArrayDeque.removeFirst(); //    ==> 12
-        aArrayDeque.addLast(15);
-        aArrayDeque.addFirst(16);
-        aArrayDeque.get(2);      //==> 6
-        aArrayDeque.removeFirst(); //    ==> 16
-        aArrayDeque.removeLast();    //  ==> 15
-        aArrayDeque.removeLast();      //==> 0
-        aArrayDeque.removeLast();    //  ==> null
+        LinkedListDeque<Integer> L = new LinkedListDeque<>();
+        L.addLast(0);
+        L.addLast(2);
+        L.addLast(3);
+        L.addFirst(4);
+        int a = L.get(0);
+        System.out.println(a);
     }
 }
