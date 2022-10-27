@@ -61,27 +61,26 @@ public class ArrayTest {
     public static void main(String[] args) {
         ArrayDeque<Integer> aArrayDeque = new ArrayDeque<>();
         aArrayDeque.addLast(0);
-        aArrayDeque.addFirst(1);
-        aArrayDeque.get(1)      ;   //   ==> 0
-        aArrayDeque.removeLast() ;  //   ==> 0
-        aArrayDeque.removeFirst() ; //   ==> 1
-        aArrayDeque.addLast(5);
+        aArrayDeque.get(0)     ;// ==> 0
+        aArrayDeque.addLast(2);
+        aArrayDeque.addFirst(3);
+        aArrayDeque.addFirst(4);
+        aArrayDeque.addFirst(5);
         aArrayDeque.addFirst(6);
-        aArrayDeque.removeLast();  //    ==> 5
-        aArrayDeque.addLast(8);
-        aArrayDeque.removeFirst(); //    ==> 6
-        aArrayDeque.addLast(10);
-        aArrayDeque.addLast(11);
-        aArrayDeque.removeFirst(); //    ==> 8
-        aArrayDeque.addLast(13);
-        aArrayDeque.addLast(14);
-        aArrayDeque.addFirst(15);
-        aArrayDeque.addLast(16);
-        aArrayDeque.addLast(17);
-        aArrayDeque.addFirst(18);
-        aArrayDeque.printDeque();
-        System.out.println();
-        System.out.println(aArrayDeque.removeLast());
-        System.out.println(aArrayDeque.removeFirst());
+        aArrayDeque.get(5);      //==> 2
+        aArrayDeque.get(4) ;     //==> 0
+        aArrayDeque.removeLast();  //    ==> 2
+        aArrayDeque.get(1);    //  ==> 5
+        aArrayDeque.addFirst(11);
+        aArrayDeque.addFirst(12);
+        aArrayDeque.get(3);      //==> 5
+        aArrayDeque.removeFirst(); //    ==> 12
+        aArrayDeque.addLast(15);
+        aArrayDeque.addFirst(16);
+        aArrayDeque.get(2);      //==> 6
+        aArrayDeque.removeFirst(); //    ==> 16
+        aArrayDeque.removeLast();    //  ==> 15
+        aArrayDeque.removeLast();      //==> 0
+        aArrayDeque.removeLast();    //  ==> null
     }
 }

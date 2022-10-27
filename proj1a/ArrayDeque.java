@@ -63,8 +63,9 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.size--;
         this.nextFirst = resizingToZeroOrLength(++this.nextFirst);
+        T a = this.arr[this.nextFirst];
         resizingArr();
-        return this.arr[this.nextFirst];
+        return a;
     }
 
     @Override
@@ -74,8 +75,9 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.size--;
         this.nextLast = resizingToZeroOrLength(--this.nextLast);
+        T a = this.arr[this.nextLast];
         resizingArr();
-        return this.arr[this.nextLast];
+        return a;
     }
 
     @Override
