@@ -4,7 +4,7 @@ public class ArrayDeque<T> implements Deque<T> {
      * get and size must take constant time
      * The starting size of your array should be 8
      * The amount of memory that your program uses at any given time
-     *      must be proportional to the number of items
+     * must be proportional to the number of items
      *
      * @param item
      */

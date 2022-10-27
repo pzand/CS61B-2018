@@ -1,7 +1,9 @@
 public class LinkedListDeque<T> implements Deque<T> {
-    /* Add and Remove operations must not involve any looping and recursion
+    /**
+     * Add and Remove operations must not involve any looping and recursion
      * Get must use iteration, not recursion
-     * Size must take constant time*/
+     * Size must take constant time
+     */
     private int size;
     private LinkedList sentinel;
 
