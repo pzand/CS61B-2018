@@ -29,7 +29,7 @@ public class TestPalindrome {
     }
 
     @Test
-    public void testIsPalindrome_Use_OffByOne() {
+    public void testIsPalindromeUseOffByOne() {
         assertTrue(palindrome.isPalindrome("ab", new OffByOne()));
         assertTrue(palindrome.isPalindrome("ba", new OffByOne()));
         assertTrue(palindrome.isPalindrome("flake", new OffByOne()));
