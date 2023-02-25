@@ -9,6 +9,7 @@ import java.util.Random;
 /**
  * Draws a world that contains RANDOM tiles.
  */
+
 public class RandomWorldDemo {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
