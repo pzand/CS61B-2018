@@ -20,6 +20,9 @@ public class TestArrayRingBuffer {
         arb.enqueue(8);
         arb.enqueue(9);
         arb.enqueue(10);
+        for(Integer a : arb){
+            System.out.print(a + " ");
+        }
         assertEquals(1, arb.peek().intValue());
         assertEquals(1, arb.peek().intValue());
         assertEquals(1, arb.dequeue().intValue());
@@ -33,6 +36,9 @@ public class TestArrayRingBuffer {
         arb.dequeue();
         arb.dequeue();
         arb.enqueue(11);
+        for(Integer a : arb){
+            System.out.print(a + " ");
+        }
         assertEquals(11, arb.dequeue().intValue());
     }
 
