@@ -1,10 +1,11 @@
 package synthesizer;// TODO: Make sure to make this class a part of the synthesizer package
 // package <package name>;
+
 import java.util.Iterator;
 
 //TODO: Make sure to make this class and all of its methods public
 //TODO: Make sure to make this class extend AbstractBoundedQueue<t>
-public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
+public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     /* Index for the next dequeue or peek. */
     private int first;            // index for the next dequeue or peek
     /* Index for the next enqueue. */
@@ -35,7 +36,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
      * covered Monday.
      */
     public void enqueue(T x) {
-        if(isFull()){
+        if (isFull()) {
             throw new RuntimeException("queue is full");
         }
 
@@ -52,7 +53,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
      */
     public T dequeue() {
         // TODO: Dequeue the first item. Don't forget to decrease fillCount and update
-        if(isEmpty()){
+        if (isEmpty()) {
             throw new RuntimeException("the queue is empty");
         }
 
@@ -67,11 +68,11 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
      */
     public T peek() {
         // TODO: Return the first item. None of your instance variables should change.
-        if(isEmpty()){
+        if (isEmpty()) {
             throw new RuntimeException("the queue is empty");
         }
 
-        return rb[ first ];
+        return rb[first];
     }
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
