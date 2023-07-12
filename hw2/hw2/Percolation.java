@@ -3,15 +3,21 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
+    WeightedQuickUnionUF percolationSystem; // the percolation blocked
     private int N;  // the size of the percolation
-    private int[][] percolationSystem;
+    private boolean[][] isOpen; // the block is open
+    private int openSites; //number of opened sites
+    private final static int[] x = {-1, 1, 0, 0};
+    private final static int[] y = {0, 0, -1, 1};
 
-    // create N-by-N grid, with all sited initiall
+    // create N-by-N grid, with all sited initially blocked
     public Percolation(int N) {
         if (N <= 0){
             throw new IndexOutOfBoundsException();
         }
-        percolationSystem = new int[N][N];
+        percolationSystem = new WeightedQuickUnionUF(N * N);
+        openSites = 0;
+        isOpen = new boolean[N][N];
     }
 
     // open the site (row, col) if it is not open
@@ -19,7 +25,22 @@ public class Percolation {
         if ( isOutOfBounds(row, col) ) {
             throw new IllegalArgumentException();
         }
+        if ( isOpen(row, col) ){
+            return;
+        }
 
+        isOpen[row][col] = true;
+        openSites++;
+        for(int i = 0;i < x.length;i++) {
+            int xx = row + x[i], yy = col + y[i];
+            if ( isOutOfBounds(xx, yy) ) {
+                continue;
+            }
+
+            if( isOpen[xx][yy] ){
+                percolationSystem.union(row * N + col, xx * N + yy);
+            }
+        }
     }
 
     // is the site (row, col) open?
@@ -28,7 +49,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
 
-        return false;
+        return isOpen[row][col];
     }
 
     // is the site (row, col) full?
@@ -37,16 +58,27 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
 
+        for (int i = 0;i < N;i++) {
+            if (percolationSystem.connected(i, row * N + col)){
+                return true;
+            }
+        }
         return false;
     }
 
     // number of open sites
     public int numberOfOpenSites() {
-        return 0;
+        return openSites;
     }
 
     // does the system percolate?
     public boolean percolates() {
+        for (int i = 0;i < N;i++){
+            if ( isFull(N - 1, i) ){
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -63,6 +95,5 @@ public class Percolation {
 
     // use for unit testing (not required)
     public static void main(String[] args) {
-
     }
 }
