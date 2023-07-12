@@ -3,8 +3,8 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    WeightedQuickUnionUF percolationSystem; // the percolation blocked, the N blocked is virtual top, the M+1 blocked is virtual bottom
-    WeightedQuickUnionUF perFull; // use for whether the percolation is full, the N blocked is virtual top. Avoid backwash
+    private WeightedQuickUnionUF percolationSystem; // the percolation blocked, the N blocked is virtual top, the M+1 blocked is virtual bottom
+    private WeightedQuickUnionUF perFull; // use for whether the percolation is full, the N blocked is virtual top. Avoid backwash
     private final int N;  // the size of the percolation
     private boolean[][] isOpen; // the block is open
     private int openSites; //number of opened sites
@@ -16,7 +16,7 @@ public class Percolation {
     // create N-by-N grid, with all sited initially blocked
     public Percolation(int N) {
         if (N <= 0){
-            throw new IndexOutOfBoundsException();
+            throw new IllegalArgumentException();
         }
         this.virtualTop = N * N;
         this.virtualBottom = N * N + 1;
@@ -39,7 +39,7 @@ public class Percolation {
     // open the site (row, col) if it is not open
     public void open(int row, int col) {
         if ( isOutOfBounds(row, col) ) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
         if ( isOpen(row, col) ){
             return;
@@ -63,7 +63,7 @@ public class Percolation {
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
         if ( isOutOfBounds(row, col) ) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
 
         return isOpen[row][col];
@@ -72,7 +72,7 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         if ( isOutOfBounds(row, col) ) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
         if ( !isOpen(row, col) ){
             return false;

@@ -55,7 +55,7 @@ public class PercolationStats {
         nSitesToPercolation = new int[N];
         for (int i = 0; i < N; i++) {
             Percolation per = pf.make(N);
-            nSitesToPercolation[i] = completeAPercolation(per);
+            nSitesToPercolation[i] = completeAPercolation(per) / T;
         }
     }
 
