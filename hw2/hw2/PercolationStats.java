@@ -7,7 +7,7 @@ public class PercolationStats {
     private final int T; // perform T independent experiments
     private final int N; // N-by-N grid
     private final PercolationFactory pf;
-    private int[] nSitesToPercolation;
+    private double[] nSitesToPercolation;
     private double mean;
     private double stddev;
 
@@ -52,10 +52,10 @@ public class PercolationStats {
     }
 
     private void completePercolationByT() {
-        nSitesToPercolation = new int[N];
-        for (int i = 0; i < N; i++) {
+        nSitesToPercolation = new double[T];
+        for (int i = 0; i < T; i++) {
             Percolation per = pf.make(N);
-            nSitesToPercolation[i] = completeAPercolation(per) / T;
+            nSitesToPercolation[i] = (double) completeAPercolation(per) / T;
         }
     }
 
