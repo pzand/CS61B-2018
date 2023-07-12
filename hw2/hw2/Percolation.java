@@ -3,10 +3,13 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    WeightedQuickUnionUF percolationSystem; // the percolation blocked
-    private int N;  // the size of the percolation
+    WeightedQuickUnionUF percolationSystem; // the percolation blocked, the N blocked is virtual top, the M+1 blocked is virtual bottom
+    WeightedQuickUnionUF perFull; // use for whether the percolation is full, the N blocked is virtual top. Avoid backwash
+    private final int N;  // the size of the percolation
     private boolean[][] isOpen; // the block is open
     private int openSites; //number of opened sites
+    private final int virtualTop; // the virtual top
+    private final int virtualbottom; // the virtual bottom
     private final static int[] x = {-1, 1, 0, 0};
     private final static int[] y = {0, 0, -1, 1};
 
@@ -15,9 +18,22 @@ public class Percolation {
         if (N <= 0){
             throw new IndexOutOfBoundsException();
         }
-        percolationSystem = new WeightedQuickUnionUF(N * N);
-        openSites = 0;
-        isOpen = new boolean[N][N];
+        this.virtualTop = N * N;
+        this.virtualbottom = N * N + 1;
+        this.percolationSystem = new WeightedQuickUnionUF(N * N + 2);
+        this.perFull = new WeightedQuickUnionUF(N * N + 1);
+        this.openSites = 0;
+        this.N = N;
+        this.isOpen = new boolean[N][N];
+
+        // union the virtual top and the actual top
+        for (int i = 0;i < N;i++) {
+            percolationSystem.union(virtualTop, i);
+            perFull.union(virtualTop, i);
+        }
+        for (int i = 0;i < N;i++) {
+            percolationSystem.union(virtualbottom, N * (N - 1) + i);
+        }
     }
 
     // open the site (row, col) if it is not open
@@ -39,6 +55,7 @@ public class Percolation {
 
             if( isOpen[xx][yy] ){
                 percolationSystem.union(row * N + col, xx * N + yy);
+                perFull.union(row * N + col, xx * N + yy);
             }
         }
     }
@@ -57,13 +74,17 @@ public class Percolation {
         if ( isOutOfBounds(row, col) ) {
             throw new IllegalArgumentException();
         }
-
-        for (int i = 0;i < N;i++) {
-            if (percolationSystem.connected(i, row * N + col)){
-                return true;
-            }
+        if ( !isOpen(row, col) ){
+            return false;
         }
-        return false;
+
+        return perFull.connected(virtualTop, row * N + col);
+//        for (int i = 0;i < N;i++) {
+//            if (percolationSystem.connected(i, row * N + col)){
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     // number of open sites
@@ -73,13 +94,14 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        for (int i = 0;i < N;i++){
-            if ( isFull(N - 1, i) ){
-                return true;
-            }
-        }
-
-        return false;
+        return percolationSystem.connected(virtualTop, virtualbottom);
+//        for (int i = 0;i < N;i++){
+//            if ( isFull(N - 1, i) ){
+//                return true;
+//            }
+//        }
+//
+//        return false;
     }
 
     // is out of bounds
