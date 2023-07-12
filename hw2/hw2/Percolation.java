@@ -9,7 +9,7 @@ public class Percolation {
     private boolean[][] isOpen; // the block is open
     private int openSites; //number of opened sites
     private final int virtualTop; // the virtual top
-    private final int virtualbottom; // the virtual bottom
+    private final int virtualBottom; // the virtual bottom
     private final static int[] x = {-1, 1, 0, 0};
     private final static int[] y = {0, 0, -1, 1};
 
@@ -19,7 +19,7 @@ public class Percolation {
             throw new IndexOutOfBoundsException();
         }
         this.virtualTop = N * N;
-        this.virtualbottom = N * N + 1;
+        this.virtualBottom = N * N + 1;
         this.percolationSystem = new WeightedQuickUnionUF(N * N + 2);
         this.perFull = new WeightedQuickUnionUF(N * N + 1);
         this.openSites = 0;
@@ -32,7 +32,7 @@ public class Percolation {
             perFull.union(virtualTop, i);
         }
         for (int i = 0;i < N;i++) {
-            percolationSystem.union(virtualbottom, N * (N - 1) + i);
+            percolationSystem.union(virtualBottom, N * (N - 1) + i);
         }
     }
 
@@ -79,12 +79,6 @@ public class Percolation {
         }
 
         return perFull.connected(virtualTop, row * N + col);
-//        for (int i = 0;i < N;i++) {
-//            if (percolationSystem.connected(i, row * N + col)){
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
     // number of open sites
@@ -94,14 +88,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return percolationSystem.connected(virtualTop, virtualbottom);
-//        for (int i = 0;i < N;i++){
-//            if ( isFull(N - 1, i) ){
-//                return true;
-//            }
-//        }
-//
-//        return false;
+        return percolationSystem.connected(virtualTop, virtualBottom);
     }
 
     // is out of bounds
