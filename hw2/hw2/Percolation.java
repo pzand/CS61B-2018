@@ -3,15 +3,15 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private WeightedQuickUnionUF percolationSystem; // the percolation blocked, the N blocked is virtual top, the M+1 blocked is virtual bottom
+    private WeightedQuickUnionUF percolationSystem; // the percolation blocked, the N blocked is virtual top, the N+1 blocked is virtual bottom
     private WeightedQuickUnionUF perFull; // use for whether the percolation is full, the N blocked is virtual top. Avoid backwash
     private final int N;  // the size of the percolation
     private boolean[][] isOpen; // the block is open
     private int openSites; //number of opened sites
     private final int virtualTop; // the virtual top
     private final int virtualBottom; // the virtual bottom
-    private final static int[] x = {-1, 1, 0, 0};
-    private final static int[] y = {0, 0, -1, 1};
+    private final static int[] X = {-1, 1, 0, 0};
+    private final static int[] Y = {0, 0, -1, 1};
 
     // create N-by-N grid, with all sited initially blocked
     public Percolation(int N) {
@@ -47,8 +47,8 @@ public class Percolation {
 
         isOpen[row][col] = true;
         openSites++;
-        for (int i = 0; i < x.length; i++) {
-            int xx = row + x[i], yy = col + y[i];
+        for (int i = 0; i < X.length; i++) {
+            int xx = row + X[i], yy = col + Y[i];
             if (isOutOfBounds(xx, yy)) {
                 continue;
             }
@@ -74,6 +74,9 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
+        if (!isOpen(row, col)) {
+            return false;
+        }
 
         return perFull.connected(virtualTop, row * N + col);
     }
@@ -97,5 +100,9 @@ public class Percolation {
             return true;
         }
         return false;
+    }
+
+    // use for unit testing (not required)
+    public static void main(String[] args) {
     }
 }
