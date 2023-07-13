@@ -15,7 +15,7 @@ public class Percolation {
 
     // create N-by-N grid, with all sited initially blocked
     public Percolation(int N) {
-        if (N <= 0){
+        if (N <= 0) {
             throw new IllegalArgumentException();
         }
         this.virtualTop = N * N;
@@ -27,33 +27,33 @@ public class Percolation {
         this.isOpen = new boolean[N][N];
 
         // union the virtual top and the actual top
-        for (int i = 0;i < N;i++) {
+        for (int i = 0; i < N; i++) {
             percolationSystem.union(virtualTop, i);
             perFull.union(virtualTop, i);
         }
-        for (int i = 0;i < N;i++) {
+        for (int i = 0; i < N; i++) {
             percolationSystem.union(virtualBottom, N * (N - 1) + i);
         }
     }
 
     // open the site (row, col) if it is not open
     public void open(int row, int col) {
-        if ( isOutOfBounds(row, col) ) {
+        if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        if ( isOpen(row, col) ){
+        if (isOpen(row, col)) {
             return;
         }
 
         isOpen[row][col] = true;
         openSites++;
-        for(int i = 0;i < x.length;i++) {
+        for (int i = 0; i < x.length; i++) {
             int xx = row + x[i], yy = col + y[i];
-            if ( isOutOfBounds(xx, yy) ) {
+            if (isOutOfBounds(xx, yy)) {
                 continue;
             }
 
-            if( isOpen[xx][yy] ){
+            if (isOpen[xx][yy]) {
                 percolationSystem.union(row * N + col, xx * N + yy);
                 perFull.union(row * N + col, xx * N + yy);
             }
@@ -62,7 +62,7 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if ( isOutOfBounds(row, col) ) {
+        if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -71,11 +71,8 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if ( isOutOfBounds(row, col) ) {
+        if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
-        }
-        if ( !isOpen(row, col) ){
-            return false;
         }
 
         return perFull.connected(virtualTop, row * N + col);
@@ -88,7 +85,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return percolationSystem.connected(virtualTop, virtualBottom);
+        return percolationSystem.connected(virtualTop, virtualBottom) && openSites >= 1;
     }
 
     // is out of bounds
@@ -100,9 +97,5 @@ public class Percolation {
             return true;
         }
         return false;
-    }
-
-    // use for unit testing (not required)
-    public static void main(String[] args) {
     }
 }
