@@ -55,7 +55,7 @@ public class PercolationStats {
         nSitesToPercolation = new double[T];
         for (int i = 0; i < T; i++) {
             Percolation per = pf.make(N);
-            nSitesToPercolation[i] = (double) completeAPercolation(per) / T;
+            nSitesToPercolation[i] = (double) completeAPercolation(per) / (N * N);
         }
     }
 
