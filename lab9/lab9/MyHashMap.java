@@ -116,7 +116,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public V remove(K key) {
         int hash = hash(key) % buckets.length;
-        return buckets[hash].remove(key);
+        V value = buckets[hash].remove(key);
+        if (value != null){
+            this.size--;
+        }
+        return value;
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -125,7 +129,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public V remove(K key, V value) {
         int hash = hash(key) % buckets.length;
-        return buckets[hash].remove(key, value);
+        V val = buckets[hash].remove(key, value);
+        if (val != null){
+            this.size--;
+        }
+        return val;
     }
 
     @Override
