@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- *  A hash table-backed Map implementation. Provides amortized constant time
- *  access to elements via get(), remove(), and put() in the best case.
+ * A hash table-backed Map implementation. Provides amortized constant time
+ * access to elements via get(), remove(), and put() in the best case.
  *
- *  @author Your name here
+ * @author Your name here
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
-    private static final int DEFAULT_SIZE = 16;
+    private static final int DEFAULT_SIZE = 4;
     private static final double MAX_LF = 0.75;
 
     private ArrayMap<K, V>[] buckets;
@@ -36,9 +36,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
     }
 
-    /** Computes the hash function of the given key. Consists of
-     *  computing the hashcode, followed by modding by the number of buckets.
-     *  To handle negative numbers properly, uses floorMod instead of %.
+    /**
+     * Computes the hash function of the given key. Consists of
+     * computing the hashcode, followed by modding by the number of buckets.
+     * To handle negative numbers properly, uses floorMod instead of %.
      */
     private int hash(K key) {
         if (key == null) {
@@ -65,12 +66,34 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         int sizeOfBucket = buckets[hash].size();
         buckets[hash].put(key, value);
         size += buckets[hash].size() - sizeOfBucket;
+
+        if (loadFactor() > MAX_LF) {
+            reSize();
+        }
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
         return this.size;
+    }
+
+    private void reSize() {
+        ArrayMap<K,V>[] newBuckets = new ArrayMap[buckets.length * 2];
+        for (int i = 0; i < newBuckets.length; i += 1) {
+            newBuckets[i] = new ArrayMap<>();
+        }
+
+
+        for (ArrayMap<K, V> arr : buckets) {
+            Set<K> keySet = arr.keySet();
+
+            for (K key : keySet){
+                int hash = hash(key) % newBuckets.length;
+                newBuckets[hash].put(key, arr.get(key));
+            }
+        }
+        buckets = newBuckets;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
