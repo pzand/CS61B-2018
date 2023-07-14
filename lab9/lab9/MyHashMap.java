@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
-    private static final int DEFAULT_SIZE = 4;
+    private static final int DEFAULT_SIZE = 16;
     private static final double MAX_LF = 0.75;
 
     private ArrayMap<K, V>[] buckets;
