@@ -148,6 +148,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         this.storeDeleteNode = null;
 
         root = removeHelper(key, null, root);
+        if (storeDeleteNode != null) {
+            size--;
+        }
         return storeDeleteNode;
     }
 
@@ -213,6 +216,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         this.storeDeleteNode = null;
 
         root = removeHelper(key, value, root);
+        if (storeDeleteNode != null) {
+            size--;
+        }
         return storeDeleteNode;
     }
 
