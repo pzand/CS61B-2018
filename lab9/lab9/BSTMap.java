@@ -43,8 +43,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         size = 0;
     }
 
-    /** Returns the value mapped to by KEY in the subtree rooted in P.
-     *  or null if this map contains no mapping for the key.
+    /**
+     * Returns the value mapped to by KEY in the subtree rooted in P.
+     * or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
         if (p == null) {
@@ -60,8 +61,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return p.value;
     }
 
-    /** Returns the value to which the specified key is mapped, or null if this
-     *  map contains no mapping for the key.
+    /**
+     * Returns the value to which the specified key is mapped, or null if this
+     * map contains no mapping for the key.
      */
     @Override
     public V get(K key) {
@@ -73,8 +75,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
 
-    /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
-      * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
+    /**
+     * Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
+     * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
         if (p == null) {
@@ -85,7 +88,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         int compareResult = key.compareTo(p.key);
         if (compareResult < 0) {
             p.left = putHelper(key, value, p.left);
-        } else if (compareResult > 0){
+        } else if (compareResult > 0) {
             p.right = putHelper(key, value, p.right);
         } else {
             p.value = value;
@@ -94,8 +97,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return p;
     }
 
-    /** Inserts the key KEY
-     *  If it is already present, updates value to be VALUE.
+    /**
+     * Inserts the key KEY
+     * If it is already present, updates value to be VALUE.
      */
     @Override
     public void put(K key, V value) {
@@ -131,9 +135,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return set;
     }
 
-    /** Removes KEY from the tree if present
-     *  returns VALUE removed,
-     *  null on failed removal.
+    /**
+     * Removes KEY from the tree if present
+     * returns VALUE removed,
+     * null on failed removal.
      */
     @Override
     public V remove(K key) {
@@ -142,14 +147,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         this.storeDeleteNode = null;
 
-        root = removeHelper(key,null, root);
+        root = removeHelper(key, null, root);
         return storeDeleteNode;
     }
 
-    /** remove key from the tree if present
-     *  returns a tree that have been removed the node of needing
+    /**
+     * remove key from the tree if present
+     * returns a tree that have been removed the node of needing
      */
-    private Node removeHelper(K key,V value, Node p) {
+    private Node removeHelper(K key, V value, Node p) {
         if (p == null) {
             return null;
         }
@@ -164,8 +170,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
 
         /* Removes the key-value entry for the specified key only if it is
-        *  if it is not, return nodes*/
-        if ( value != null && !value.equals(p.value) ) {
+         *  if it is not, return nodes*/
+        if (value != null && !value.equals(p.value)) {
             return p;
         }
 
@@ -194,9 +200,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return deleteMaxNode(p.right);
     }
 
-    /** Removes the key-value entry for the specified key only if it is
-     *  currently mapped to the specified value.  Returns the VALUE removed,
-     *  null on failed removal.
+    /**
+     * Removes the key-value entry for the specified key only if it is
+     * currently mapped to the specified value.  Returns the VALUE removed,
+     * null on failed removal.
      **/
     @Override
     public V remove(K key, V value) {
@@ -220,7 +227,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         public iteratorHelp() {
             this.list = new LinkedList<>();
-            list.add(root);
+            if (root != null) {
+                list.add(root);
+            }
         }
 
         @Override

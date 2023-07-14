@@ -79,21 +79,21 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     private void reSize() {
-        ArrayMap<K,V>[] newBuckets = new ArrayMap[buckets.length * 2];
-        for (int i = 0; i < newBuckets.length; i += 1) {
-            newBuckets[i] = new ArrayMap<>();
+        ArrayMap<K, V>[] oldBuckets = buckets;
+        buckets = new ArrayMap[buckets.length * 2];
+        for (int i = 0; i < buckets.length; i += 1) {
+            buckets[i] = new ArrayMap<>();
         }
 
 
-        for (ArrayMap<K, V> arr : buckets) {
+        for (ArrayMap<K, V> arr : oldBuckets) {
             Set<K> keySet = arr.keySet();
 
-            for (K key : keySet){
-                int hash = hash(key) % newBuckets.length;
-                newBuckets[hash].put(key, arr.get(key));
+            for (K key : keySet) {
+                int hash = hash(key) % buckets.length;
+                buckets[hash].put(key, arr.get(key));
             }
         }
-        buckets = newBuckets;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -117,7 +117,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public V remove(K key) {
         int hash = hash(key) % buckets.length;
         V value = buckets[hash].remove(key);
-        if (value != null){
+        if (value != null) {
             this.size--;
         }
         return value;
@@ -130,7 +130,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public V remove(K key, V value) {
         int hash = hash(key) % buckets.length;
         V val = buckets[hash].remove(key, value);
-        if (val != null){
+        if (val != null) {
             this.size--;
         }
         return val;
