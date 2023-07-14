@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.BSTMap;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
@@ -84,6 +87,32 @@ public class TestBSTMap {
         b.put("hi", 1);
         assertTrue(b.containsKey("hi"));
         assertTrue(b.get("hi") != null);
+    }
+
+    @Test
+    public void remove() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        b.put(8, 1);
+//        b.put(4, 1);
+//        b.put(12, 1);
+//        b.put(2, 1);
+//        b.put(6, 1);
+//        b.put(10, 1);
+//        b.put(14, 1);
+//        b.put(1, 1);
+//        b.put(3, 1);
+//        b.put(5, 1);
+//        b.put(7, 1);
+//        b.put(9, 1);
+//        b.put(11, 1);
+//        b.put(13, 1);
+//        b.put(15, 1);
+        b.remove(8);
+//        b.remove(4, 2);
+//        b.remove(9, 1);
+        for (Integer integer : b) {
+            System.out.println(integer);
+        }
     }
 
     public static void main(String[] args) {

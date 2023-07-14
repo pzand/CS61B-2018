@@ -13,10 +13,10 @@ public class TestMyHashMap {
     @Test
     public void sanityGenericsTest() {
         try {
-            MyHashMap<String, String> a = new MyHashMap<String, String>();
-            MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
-            MyHashMap<Integer, String> c = new MyHashMap<Integer, String>();
-            MyHashMap<Boolean, Integer> e = new MyHashMap<Boolean, Integer>();
+            MyHashMap<String, String> a = new MyHashMap<>();
+            MyHashMap<String, Integer> b = new MyHashMap<>();
+            MyHashMap<Integer, String> c = new MyHashMap<>();
+            MyHashMap<Boolean, Integer> e = new MyHashMap<>();
         } catch (Exception e) {
             fail();
         }
@@ -25,7 +25,7 @@ public class TestMyHashMap {
     //assumes put/size/containsKey/get work
     @Test
     public void sanityClearTest() {
-        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        MyHashMap<String, Integer> b = new MyHashMap<>();
         for (int i = 0; i < 455; i++) {
             b.put("hi" + i, 1);
             //make sure put is working via containsKey and get
@@ -42,7 +42,7 @@ public class TestMyHashMap {
     // assumes put works
     @Test
     public void sanityContainsKeyTest() {
-        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        MyHashMap<String, Integer> b = new MyHashMap<>();
         assertFalse(b.containsKey("waterYouDoingHere"));
         b.put("waterYouDoingHere", 0);
         assertTrue(b.containsKey("waterYouDoingHere"));
@@ -51,7 +51,7 @@ public class TestMyHashMap {
     // assumes put works
     @Test
     public void sanityGetTest() {
-        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        MyHashMap<String, Integer> b = new MyHashMap<>();
         assertEquals(null, b.get("starChild"));
         b.put("starChild", 5);
         assertNotEquals(null, b.get("starChild"));
@@ -63,7 +63,7 @@ public class TestMyHashMap {
     // assumes put works
     @Test
     public void sanitySizeTest() {
-        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        MyHashMap<String, Integer> b = new MyHashMap<>();
         assertEquals(0, b.size());
         b.put("hi", 1);
         assertEquals(1, b.size());
@@ -76,7 +76,7 @@ public class TestMyHashMap {
     //assumes get/containskey work
     @Test
     public void sanityPutTest() {
-        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        MyHashMap<String, Integer> b = new MyHashMap<>();
         b.put("hi", 1);
         assertTrue(b.containsKey("hi") && b.get("hi") != null);
     }
@@ -125,6 +125,18 @@ public class TestMyHashMap {
         studentIDs.put("evil alan", 345);
         assertEquals(345, studentIDs.get("evil alan").intValue());
         assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
+    }
+
+    @Test
+    public void reSize() {
+        MyHashMap<Integer, Integer> dictionary = new MyHashMap<>();
+        dictionary.put(1, 1);
+        dictionary.put(2, 1);
+        dictionary.put(3, 1);
+        dictionary.put(4, 1);
+        dictionary.put(5, 1);
+        dictionary.put(6, 1);
+        dictionary.remove(6);
     }
 
     public static void main(String[] args) {
