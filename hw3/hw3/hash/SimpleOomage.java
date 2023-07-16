@@ -1,5 +1,7 @@
 package hw3.hash;
 import java.awt.Color;
+import java.util.Objects;
+
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -15,8 +17,24 @@ public class SimpleOomage implements Oomage {
     @Override
     public boolean equals(Object o) {
         // TODO: Write this method.
-        return false;
+        if (this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SimpleOomage O = (SimpleOomage) o;
+        return this.blue == O.blue && this.green == O.green && this.red == O.red;
     }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(red, green, blue);
+    }
+
+
+
 
     /* Uncomment this method after you've written
        equals and failed the testHashCodeAndEqualsConsistency
