@@ -180,12 +180,18 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T removeMin() {
         /* TODO: Your code here! */
+        if (size() < 1) {
+            return null;
+        }
+
         Node minNode = getNode(1);
         swap(1, size);
         contents[size] = null;
         size -= 1;
 
-        sink(1);
+        if (size() >= 1) {
+            sink(1);
+        }
         return minNode.myItem;
     }
 
@@ -209,10 +215,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
+        if (item == null) {
+            return;
+        }
+
         // search the node of having the same item
         int index = 1;
         for (Node node : contents) {
-            if (node.myItem.equals(item)) {
+            if (item.equals(node.myItem)) {
                 break;
             }
             index += 1;
