@@ -221,11 +221,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
         // search the node of having the same item
         int index = 1;
-        for (Node node : contents) {
-            if (item.equals(node.myItem)) {
+        for (int i = 1; i <= size(); i++) {
+            if (item.equals(getNode(i).myItem)) {
                 break;
             }
-            index += 1;
+            index++;
         }
 
         Node node = getNode(index);
