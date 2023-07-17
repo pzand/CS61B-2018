@@ -1,6 +1,7 @@
 package hw3.hash;
 
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -33,22 +34,22 @@ public class TestSimpleOomage {
         Set<Integer> set = new HashSet<>();
         SimpleOomage o1 = new SimpleOomage(0, 0, 0);
         set.add(o1.hashCode());
-        for (int i = 5;i <= 255;i += 5) {
+        for (int i = 5; i <= 255; i += 5) {
             SimpleOomage o = new SimpleOomage(0, 0, i);
             set.add(o.hashCode());
             j++;
         }
-        for (int i = 5;i <= 255;i += 5) {
+        for (int i = 5; i <= 255; i += 5) {
             SimpleOomage o = new SimpleOomage(i, 0, 0);
             set.add(o.hashCode());
             j++;
         }
-        for (int i = 5;i <= 255;i += 5) {
+        for (int i = 5; i <= 255; i += 5) {
             SimpleOomage o = new SimpleOomage(0, i, 0);
             set.add(o.hashCode());
             j++;
         }
-        for (int i = 5;i <= 255;i += 5) {
+        for (int i = 5; i <= 255; i += 5) {
             SimpleOomage o = new SimpleOomage(i, i, i);
             set.add(o.hashCode());
             j++;
@@ -95,7 +96,9 @@ public class TestSimpleOomage {
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
     }
 
-    /** Calls tests for SimpleOomage. */
+    /**
+     * Calls tests for SimpleOomage.
+     */
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(TestSimpleOomage.class);
     }

@@ -1,4 +1,5 @@
 package hw3.hash;
+
 import java.awt.Color;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class SimpleOomage implements Oomage {
         if (this == o) {
             return true;
         }
-        if(o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         SimpleOomage O = (SimpleOomage) o;
@@ -28,11 +29,7 @@ public class SimpleOomage implements Oomage {
     }
 
 
-
-
-
-
-//    Uncomment this method after you've written
+    //    Uncomment this method after you've written
 //       equals and failed the testHashCodeAndEqualsConsistency
 //       test.
     @Override

@@ -19,7 +19,7 @@ public class OomageTestUtility {
             int index = (o.hashCode() & 0x7FFFFFFF) % M;
             bucket[index]++;
         }
-        for (int i = 0; i < M;i++) {
+        for (int i = 0; i < M; i++) {
             if (bucket[i] < low || bucket[i] > hight) {
                 return false;
             }
