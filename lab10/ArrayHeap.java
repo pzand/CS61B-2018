@@ -1,5 +1,7 @@
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 /**
  * A Generic heap class. Unlike Java's priority queue, this heap doesn't just
  * store Comparable objects. Instead, it can store any type of object
@@ -27,7 +29,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int leftIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return i * 2;
     }
 
     /**
@@ -35,7 +37,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int rightIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return i * 2 + 1;
     }
 
     /**
@@ -43,7 +45,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int parentIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return i / 2;
     }
 
     /**
@@ -107,7 +109,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         validateSinkSwimArg(index);
 
         /** TODO: Your code here. */
-        return;
+        while (index != 1) {
+            int parentIndex = parentIndex(index);
+            if (getNode(index).myPriority < getNode(parentIndex).myPriority) {
+                swap(index, parentIndex);
+            }
+            index = parentIndex;
+        }
     }
 
     /**
@@ -118,7 +126,15 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         validateSinkSwimArg(index);
 
         /** TODO: Your code here. */
-        return;
+        int minIndex = min(leftIndex(index), rightIndex(index));
+        if (getNode(minIndex) == null) {
+            return;
+        }
+        if (getNode(index).myPriority <= getNode(minIndex).myPriority) {
+            return;
+        }
+        swap(index, minIndex);
+        sink(minIndex);
     }
 
     /**
@@ -133,6 +149,10 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         }
 
         /* TODO: Your code here! */
+        Node node = new Node(item, priority);
+        size += 1;
+        contents[size] = node;
+        swim(size);
     }
 
     /**
@@ -142,6 +162,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T peek() {
         /* TODO: Your code here! */
+        if (contents[1] != null) {
+            return contents[1].myItem;
+        }
         return null;
     }
 
@@ -157,7 +180,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T removeMin() {
         /* TODO: Your code here! */
-        return null;
+        Node minNode = getNode(1);
+        swap(1, size);
+        contents[size] = null;
+        size -= 1;
+
+        sink(1);
+        return minNode.myItem;
     }
 
     /**
@@ -180,7 +209,21 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
-        return;
+        // search the node of having the same item
+        int index = 1;
+        for (Node node : contents) {
+            if (node.myItem.equals(item)) {
+                break;
+            }
+            index += 1;
+        }
+
+        Node node = getNode(index);
+        if (node != null) {
+            node.myPriority = priority;
+            swim(index);
+            sink(index);
+        }
     }
 
     /**
@@ -223,7 +266,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         if (index > size) {
             throw new IllegalArgumentException("Cannot sink or swim nodes with index greater than current size.");
         }
-        if (contents[index] == null) {
+        if (getNode(index) == null) {
             throw new IllegalArgumentException("Cannot sink or swim a null node.");
         }
     }
@@ -237,7 +280,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             myPriority = priority;
         }
 
-        public T item(){
+        public T item() {
             return myItem;
         }
 
@@ -252,7 +295,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     }
 
 
-    /** Helper function to resize the backing array when necessary. */
+    /**
+     * Helper function to resize the backing array when necessary.
+     */
     private void resize(int capacity) {
         Node[] temp = new ArrayHeap.Node[capacity];
         for (int i = 1; i < this.contents.length; i++) {
