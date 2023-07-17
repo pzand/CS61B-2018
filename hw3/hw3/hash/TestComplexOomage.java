@@ -1,5 +1,6 @@
 package hw3.hash;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,15 +37,27 @@ public class TestComplexOomage {
     /* TODO: Create a list of Complex Oomages called deadlyList
      * that shows the flaw in the hashCode function.
      */
-    /*
     @Test
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
-
         // Your code here.
+        ArrayList<Integer> list = new ArrayList<>();
+        int[] arr = new int[3];
+        for (int i = 0;i < 3;i++) {
+            arr[i] = StdRandom.uniform(0, 255);
+        }
 
+        for(int i = 0;i < 100;i++) {
+            list.add(arr[i % 3]);
+            ComplexOomage oomage = new ComplexOomage(list);
+            deadlyList.add(oomage);
+        }
+
+        //这么编写hashCode的问题：相乘导致前面的溢出，第n个数值时，前面的n-4个数值因为溢出都会导致无效
+        //因此实际有效的数值只有后三个
+        //该测试案例利用的就是循环添加三个数达到目的
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
-    } */
+    }
 
     /** Calls tests for SimpleOomage. */
     public static void main(String[] args) {
