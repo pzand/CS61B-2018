@@ -28,7 +28,7 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
         // TODO: Your code here. Don't forget to update distTo, edgeTo, and marked, as well as call announce()
         LinkedList<Integer> vertex = new LinkedList<>();
         vertex.add(source);
-        distTo[source] = 1;
+        distTo[source] = 0;
         edgeTo[source] = source;
         marked[source] = true;
         announce();
