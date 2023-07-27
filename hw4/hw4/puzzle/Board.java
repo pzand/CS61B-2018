@@ -18,7 +18,7 @@ public class Board implements WorldState {
         this.size = tiles.length;
         this.tiles = Arrays.stream(tiles).map(int[]::clone).toArray(int[][]::new);
 
-        int[][] goal = new int[size()][size()];
+        this.goal = new int[size()][size()];
         int sum = 1;
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
@@ -27,7 +27,6 @@ public class Board implements WorldState {
             }
         }
         goal[size() - 1][size() - 1] = 0;
-        this.goal = goal;
     }
 
     public Board(int[][] tiles, int[][] goal) {
@@ -63,7 +62,7 @@ public class Board implements WorldState {
         int sum = 0;
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
-                if (goal[i][j] != tileAt(i, j)) {
+                if (goal[i][j] != tileAt(i, j) && tileAt(i, j) != BLANK) {
                     sum++;
                 }
             }
@@ -78,8 +77,12 @@ public class Board implements WorldState {
             for (int j = 0; j < size(); j++) {
                 // BLANK 不参与计算
                 if (goal[i][j] != tileAt(i, j) && tileAt(i, j) != BLANK) {
-                    int sub = Math.abs(goal[i][j] - tileAt(i, j));
-                    sum += sub / size() + sub % size();
+                    int atX = (tileAt(i, j) - 1) / size();
+                    int atY = (tileAt(i, j) - 1) % size();
+                    sum += Math.abs(atX - i) + Math.abs(atY - j);
+//
+//                    int sub = Math.abs(goal[i][j] - tileAt(i, j));
+//                    sum += sub / size() + sub % size();
                 }
             }
         }
@@ -88,11 +91,11 @@ public class Board implements WorldState {
         // X + goal[][](0) - tiles[][](已经) = sum
         // Y = sum + (实际) - (已经)
         // 当实际不是0时，才参与运算出现误差
-        int last = tileAt(size() - 1, size() - 1);
-        if (last != BLANK) {
-            int sub = size() * size() - last;
-            sum += sub / size() + sub % size() - (last / size() + last % size());
-        }
+//        int last = tileAt(size() - 1, size() - 1);
+//        if (last != BLANK) {
+//            int sub = size() * size() - last;
+//            sum += sub / size() + sub % size() - (last / size() + last % size());
+//        }
         return sum;
     }
 
@@ -167,8 +170,8 @@ public class Board implements WorldState {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
 
         Board board = (Board) o;
 
@@ -181,12 +184,10 @@ public class Board implements WorldState {
     }
 
     public static void main(String[] args) {
-        int[][] arr = {{8, 1, 3}, {4, 0, 2}, {7, 6, 5}};
+        int[][] arr = {{8, 1, 3}, {4, 0, 2}, {7, 6 ,5}};
+//        int[][] arr = {{0, 1, 3}, {4, 2, 5}, {7, 8 ,6}};
+//        int[][] arr = {{5, 8 ,7}, {1, 4, 6}, {3, 0 ,2}};
         Board board = new Board(arr);
-        System.out.println(board.tileAt(0, 0));
-        arr[0][0] = 1;
-        System.out.println(board.tileAt(0, 0));
-
         System.out.println(board.manhattan());
     }
 }
