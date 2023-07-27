@@ -80,22 +80,9 @@ public class Board implements WorldState {
                     int atX = (tileAt(i, j) - 1) / size();
                     int atY = (tileAt(i, j) - 1) % size();
                     sum += Math.abs(atX - i) + Math.abs(atY - j);
-//
-//                    int sub = Math.abs(goal[i][j] - tileAt(i, j));
-//                    sum += sub / size() + sub % size();
                 }
             }
         }
-        // 因为goal的最后一位是0，因此需要修正最后一位错误的情况。
-        // X + N*N - tiles[][](实际) = Y
-        // X + goal[][](0) - tiles[][](已经) = sum
-        // Y = sum + (实际) - (已经)
-        // 当实际不是0时，才参与运算出现误差
-//        int last = tileAt(size() - 1, size() - 1);
-//        if (last != BLANK) {
-//            int sub = size() * size() - last;
-//            sum += sub / size() + sub % size() - (last / size() + last % size());
-//        }
         return sum;
     }
 
@@ -181,13 +168,5 @@ public class Board implements WorldState {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(tiles);
-    }
-
-    public static void main(String[] args) {
-        int[][] arr = {{8, 1, 3}, {4, 0, 2}, {7, 6 ,5}};
-//        int[][] arr = {{0, 1, 3}, {4, 2, 5}, {7, 8 ,6}};
-//        int[][] arr = {{5, 8 ,7}, {1, 4, 6}, {3, 0 ,2}};
-        Board board = new Board(arr);
-        System.out.println(board.manhattan());
     }
 }
