@@ -2,7 +2,6 @@
  * Class for doing Radix sort
  *
  * @author Akhil Batra, Alexander Hwang
- *
  */
 public class RadixSort {
     /**
@@ -12,23 +11,57 @@ public class RadixSort {
      * The Strings can be variable length (all Strings are not constrained to 1 length)
      *
      * @param asciis String[] that needs to be sorted
-     *
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-        return null;
+        int maxLength = 0;
+        for (String str : asciis) {
+            maxLength = Math.max(maxLength, str.length());
+        }
+
+        String[] sorted = asciis.clone();
+        for (int i = maxLength - 1; i >= 0; i--) {
+            sortHelperLSD(sorted, i);
+        }
+        return sorted;
     }
 
     /**
      * LSD helper method that performs a destructive counting sort the array of
      * Strings based off characters at a specific index.
+     *
      * @param asciis Input array of Strings
-     * @param index The position to sort the Strings on.
+     * @param index  The position to sort the Strings on.
      */
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
-        return;
+        // 统计index位置的字符个数
+        int[] counting = new int[256 + 1];
+        for (String str : asciis) {
+            counting[charAtHelper(str, index)]++;
+        }
+
+        // 确定该位置字符在排序后的位置
+        int[] states = new int[256 + 1];
+        int pos = 0;
+        // 为该位置空缺的字符，优先处理(最高优先级)
+        states[256] = pos;
+        pos += counting[256];
+        for (int i = 0; i < 256; i++) {
+            states[i] = pos;
+            pos += counting[i];
+        }
+
+        // 根据计算的位置，排列得到排序后的数组
+        String[] sorted = new String[asciis.length];
+        for (String str : asciis) {
+            int charNum = charAtHelper(str, index);
+            sorted[states[charNum]] = str;
+            states[charNum]++;
+        }
+        // 复制数组达到破坏原来数组的效果
+        System.arraycopy(sorted, 0, asciis, 0, sorted.length);
     }
 
     /**
@@ -36,13 +69,27 @@ public class RadixSort {
      * Destructive method that changes the passed in array, asciis.
      *
      * @param asciis String[] to be sorted
-     * @param start int for where to start sorting in this method (includes String at start)
-     * @param end int for where to end sorting in this method (does not include String at end)
-     * @param index the index of the character the method is currently sorting on
-     *
+     * @param start  int for where to start sorting in this method (includes String at start)
+     * @param end    int for where to end sorting in this method (does not include String at end)
+     * @param index  the index of the character the method is currently sorting on
      **/
     private static void sortHelperMSD(String[] asciis, int start, int end, int index) {
         // Optional MSD helper method for optional MSD radix sort
         return;
     }
+
+    private static int charAtHelper(String str, int index) {
+        // 如果越界表示该位置没有字符，为最高优先级256。正常范围是0~255
+        if (index >= str.length()) {
+            return 256;
+        }
+        return str.charAt(index);
+    }
+//
+//    public static void main(String[] args) {
+//        String[] str = {"aaa", "bbb", "ccc", "ddd", "aaa", "abc", "bca", "da", "a"};
+//        for (String s : sort(str)) {
+//            System.out.println(s);
+//        }
+//    }
 }
