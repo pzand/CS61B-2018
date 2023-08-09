@@ -90,7 +90,7 @@ public class CountingSort {
         // 根据统计数字，得出数字实际排序位置
         int[] starts = new int[max - min + 1];
         int pos = 0;
-        for (int i = 0;i < counting.length;i++) {
+        for (int i = 0; i < counting.length; i++) {
             starts[i] = pos;
             pos += counting[i];
         }
@@ -105,7 +105,7 @@ public class CountingSort {
     }
 
     public static void main(String[] args) {
-          int[] arr = {-1, -2, -2, -3, -1, 10, -19, 100, 100};
+        int[] arr = {-1, -2, -2, -3, -1, 10, -19, 100, 100};
 //        for (int num : naiveCountingSort(arr)) {
 //            System.out.println(num);
 //        }
