@@ -66,6 +66,12 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
+        /* 实际实验表示该方法不行，因为数组过大*/
+//         由于补码负数的特性，-2147483648的绝对值仍为自身，正数的最大值为2147483647
+//         则最大可以初始化2147483647大小的数组，无法存放2147483647，-2147483648，-2147483647
+//         即把2147483647，-2147483648两个临界值单独存储，-2147483647存放到负数数组的零位置。
+//         通过对负数加上2147483647，达到负数转正数效果
+
         // 定义最小值 和 最大值，用于counting创建数组
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
@@ -74,47 +80,38 @@ public class CountingSort {
             max = Math.max(max, num);
         }
 
-        min = (min < 0 ? -min : -1);    // 数组中没有负数，则不创建负数数组
-        max += 1;
-        min += 1;
-        int[] positiveCounting = new int[max];
-        int[] negativeCounting = new int[min];
-
-        // 统计数字的个数
+        // 如果随意开数组会导致内存溢出，根据题意知数值范围不会超过2百万
+        // 因此让第一位存储min，最高位存储max
+        int[] counting = new int[max - min + 1];
         for (int num : arr) {
-            if (num >= 0) {
-                positiveCounting[num]++;
-            } else {
-                negativeCounting[-num]++;
-            }
+            counting[num + (-min)]++;
         }
 
-        // 确定每个数字排序后的位置
-        int[] positiveState = new int[max];
-        int[] negativeState = new int[min];
-        int pos = 0;    // 通过一个变量pos，保持优雅。
-        // positiveState[i] = positiveState[i - 1] + positiveCounting[i], ps[0] = c[0]。对于第一项需要判断
-        // 负数从后往前 正数从前往后
-        for (int i = negativeCounting.length - 1; i >= 0; i--) {
-            negativeState[i] = pos;
-            pos += negativeCounting[i];
-        }
-        for (int i = 0; i < positiveCounting.length; i++) {
-            positiveState[i] = pos;
-            pos += positiveCounting[i];
+        // 根据统计数字，得出数字实际排序位置
+        int[] starts = new int[max - min + 1];
+        int pos = 0;
+        for (int i = 0;i < counting.length;i++) {
+            starts[i] = pos;
+            pos += counting[i];
         }
 
-        // 根据原数组 和 数字的实际位置，合成一个排序后的数组
+        // 得到实际的数字排序
         int[] sorted = new int[arr.length];
         for (int num : arr) {
-            if (num >= 0) {
-                sorted[positiveState[num]] = num;
-                positiveState[num]++;
-            } else {
-                sorted[negativeState[-num]] = num;
-                negativeState[-num]++;
-            }
+            sorted[starts[num + (-min)]] = num;
+            starts[num + (-min)]++;
         }
         return sorted;
+    }
+
+    public static void main(String[] args) {
+          int[] arr = {-1, -2, -2, -3, -1, 10, -19, 100, 100};
+//        for (int num : naiveCountingSort(arr)) {
+//            System.out.println(num);
+//        }
+
+        for (int num : betterCountingSort(arr)) {
+            System.out.println(num);
+        }
     }
 }
