@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Class for doing Radix sort
  *
@@ -64,6 +66,21 @@ public class RadixSort {
         System.arraycopy(sorted, 0, asciis, 0, sorted.length);
     }
 
+    // 如果越界表示该位置没有字符，为最高优先级256。正常范围是0~255
+    private static int charAtHelper(String str, int index) {
+        if (index >= str.length()) {
+            return 256;
+        }
+        return str.charAt(index);
+    }
+
+    // 实现MSD基数排序
+    public static String[] MSDsort(String[] asciis) {
+        String[] sorted = asciis.clone();
+        sortHelperMSD(sorted, 0, sorted.length, 0);
+        return sorted;
+    }
+
     /**
      * MSD radix sort helper function that recursively calls itself to achieve the sorted array.
      * Destructive method that changes the passed in array, asciis.
@@ -75,21 +92,65 @@ public class RadixSort {
      **/
     private static void sortHelperMSD(String[] asciis, int start, int end, int index) {
         // Optional MSD helper method for optional MSD radix sort
-        return;
+
+        // 停止递归，如果分区少于1个
+        if (end - start <= 1) {
+            return;
+        }
+
+        // 统计数值
+        int[] counting = new int[256 + 1];
+        for (int i = start; i < end;i++) {
+            counting[charAtHelper(asciis[i], index)]++;
+        }
+
+        // 确定排序后的位置。位置从零开始，因此实际需要加上start
+        int[] starts = new int[256 + 1];
+        int pos = 0;
+        // 优先级最高的，即该位置没有字符的
+        starts[256] = pos;
+        pos += counting[256];
+        for (int i = 0;i < 256;i++) {
+            starts[i] = pos;
+            pos += counting[i];
+        }
+
+        // 复制一个开始和结束的数组，用于递归
+        int[] starts1 = Arrays.copyOf(starts, starts.length);
+
+        //
+        String[] sorted = new String[end - start];
+        for (int i = start;i < end;i++) {
+            int charNum = charAtHelper(asciis[i], index);
+            sorted[starts[charNum]] = asciis[i];
+            starts[charNum]++;
+        }
+
+        // 复制排序后的字符到原来的数组实现破坏性
+        System.arraycopy(sorted, 0, asciis, start, sorted.length);
+
+        // 对于最后一个分区 手动递归，避免for循环越界
+        sortHelperMSD(asciis, start + starts1[255], end, index + 1);
+        sortHelperMSD(asciis, start, start + starts1[0], index + 1);
+        // 递归执行分区
+        for (int i = 0;i < 256 - 1;i++){
+            int s = start + starts1[i], e = start + starts1[i + 1];
+            // 避免因为分区的元素是相同的，导致无限递归。原因可能是递归条件没有判断index的问题
+            if (start == s && e == end) {
+                continue;
+            }
+            sortHelperMSD(asciis,s ,e, index + 1);
+        }
     }
 
-    private static int charAtHelper(String str, int index) {
-        // 如果越界表示该位置没有字符，为最高优先级256。正常范围是0~255
-        if (index >= str.length()) {
-            return 256;
+
+    public static void main(String[] args) {
+        String[] str = {"aaa", "bbb", "ccc", "ddd", "aaa", "abc", "bca", "da", "a", "aaa", "abc"};
+        for (String s : MSDsort(str)) {
+            System.out.println(s);
         }
-        return str.charAt(index);
+        for (String s : sort(str)) {
+            System.out.println(s);
+        }
     }
-//
-//    public static void main(String[] args) {
-//        String[] str = {"aaa", "bbb", "ccc", "ddd", "aaa", "abc", "bca", "da", "a"};
-//        for (String s : sort(str)) {
-//            System.out.println(s);
-//        }
-//    }
 }
