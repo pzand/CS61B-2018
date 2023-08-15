@@ -7,6 +7,8 @@ package huglife;
  *
  *************************************************************************/
 
+import edu.princeton.cs.algs4.StdIn;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
