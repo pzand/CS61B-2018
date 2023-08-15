@@ -10,6 +10,7 @@ public class Clorus extends Creature {
     private int r;
     private int g;
     private int b;
+
     public Clorus() {
         this(1.0);
     }
@@ -59,7 +60,7 @@ public class Clorus extends Creature {
      * Otherwise, if any Plips are seen, the Clorus will ATTACK one of them randomly.
      * Otherwise, if the Clorus has energy greater than or equal to one, it will REPLICATE to a random empty square.
      * Otherwise, the Clorus will MOVE to a random empty square
-     * */
+     */
     @Override
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
         List<Direction> empty = getNeighborsOfType(neighbors, "empty");
