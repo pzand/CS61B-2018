@@ -17,7 +17,7 @@ public class SeamCarver {
     public SeamCarver(Picture picture) {
         this.picture = picture;
         havenCalculateEnergy = false;
-        pictureEnergy = new double[height()][width()];
+        pictureEnergy = new double[width()][height()];
     }
     public Picture picture() {
         return this.picture;
@@ -60,9 +60,9 @@ public class SeamCarver {
             calculateEnergy();
         }
 
-        double[][] transposition = new double[width()][height()];
-        for (int i = 0;i < height();i++) {
-            for (int j = 0;j < width();j++) {
+        double[][] transposition = new double[height()][width()];
+        for (int i = 0;i < width();i++) {
+            for (int j = 0;j < height();j++) {
                 transposition[j][i] = pictureEnergy[i][j];
             }
         }
@@ -86,8 +86,8 @@ public class SeamCarver {
     }
 
     private void calculateEnergy() {
-        for (int i = 0;i < height();i++) {
-            for (int j = 0;j < width();j++) {
+        for (int i = 0;i < width();i++) {
+            for (int j = 0;j < height();j++) {
                 pictureEnergy[i][j] = energy(i, j);
             }
         }
@@ -118,10 +118,11 @@ public class SeamCarver {
     }
 
     private void isOutOfBound(int i, int j) {
-        if (i < 0 || i >= height()) {
+        if (i < 0 || i >= width()) {
             throw new IndexOutOfBoundsException();
         }
-        if (j < 0 || j >= width()) {
+
+        if (j < 0 || j >= height()) {
             throw new IndexOutOfBoundsException();
         }
     }
@@ -132,7 +133,7 @@ public class SeamCarver {
         }
 
         for (int i = 1;i < length;i++) {
-            if (Math.abs(seam[i - 1] - seam[i + 1]) > 1) {
+            if (Math.abs(seam[i - 1] - seam[i]) > 1) {
                 throw new IllegalArgumentException();
             }
         }
@@ -146,10 +147,10 @@ public class SeamCarver {
         private int[][] direction;
         public FindSeamHelper(double[][] pictureEnergy) {
             this.pictureEnergy = pictureEnergy;
-            this.height = pictureEnergy.length;
-            this.width = pictureEnergy[0].length;
-            int[][] dp = new int[height][width];
-            int[][] direction = new int[height][width];
+            this.width = pictureEnergy.length;
+            this.height = pictureEnergy[0].length;
+            dp = new double[width][height];
+            direction = new int[width][height];
 
             solve();
         }
@@ -167,16 +168,18 @@ public class SeamCarver {
             // dp[i][j] = energy[i][j] + min(dp[i - 1][j + 1], dp[i][j + 1], dp[i + 1][j + 1])
             // dp[i][height - 1] = energy[i][height -1];
             // 初始化dp数组
-            if (width >= 0) System.arraycopy(pictureEnergy[height - 1], 0, dp[height - 1], 0, width);
+            for (int i = 0;i < width();i++) {
+                dp[i][height() - 1] = getEnergy(i, height() - 1);
+            }
             // 迭代求解
-            for (int i = height - 2;i >= 0;i--) {
-                for (int j = 0; j < width; j++) {
+            for (int j = height() - 2;j >= 0;j--) {
+                for (int i = 0; i < width; i++) {
                     double[] chooseEnergy = {
-                            getEnergy(i + 1, j - 1),
-                            getEnergy(i + 1, j),
+                            getEnergy(i - 1, j + 1),
+                            getEnergy(i, j + 1),
                             getEnergy(i + 1, j + 1)
                     };
-                    int minEnergyIndex = getMinIndexForArray(chooseEnergy) + j - 1;
+                    int minEnergyIndex = getMinIndexForArray(chooseEnergy) + i - 1;
                     direction[i][j] = minEnergyIndex;
                     dp[i][j] = getEnergy(i, j) + getEnergy(i + 1, minEnergyIndex);
                 }
@@ -184,10 +187,10 @@ public class SeamCarver {
         }
         // 是否越界
         private boolean isOutOfBound(int i, int j) {
-            if (i < 0 || i >= height()) {
+            if (i < 0 || i >= width()) {
                 return true;
             }
-            if (j < 0 || j >= width()) {
+            if (j < 0 || j >= height()) {
                 return true;
             }
             return false;
@@ -204,7 +207,7 @@ public class SeamCarver {
         // 根据数组获取最小下标
         private int getMinIndexForArray(double[] arr) {
             int minIndex = 0;
-            for (int i = 0; i < width; i++) {
+            for (int i = 0; i < arr.length; i++) {
                 if (arr[i] < arr[minIndex]) {
                     minIndex = i;
                 }
@@ -216,11 +219,18 @@ public class SeamCarver {
         public int[] findSeam() {
             int[] minEnergy = new int[height()];
 
-            minEnergy[0] = getMinIndexForArray(dp[0]);
-
-            for (int i = 1;i < height();i++) {
-                minEnergy[i] = direction[i - 1][minEnergy[i - 1]];
+            double[] arr = new double[width()];
+            for (int i = 0;i < width();i++) {
+                arr[i] = dp[i][0];
             }
+            minEnergy[0] = getMinIndexForArray(arr);
+
+            for (int j = 1; j < height(); j++) {
+                minEnergy[j] = direction[minEnergy[j - 1]][j - 1];
+            }
+
+            isIllegalArgument(minEnergy, minEnergy.length);
+
             return minEnergy;
         }
     }
