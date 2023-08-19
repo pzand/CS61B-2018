@@ -1,14 +1,14 @@
 import edu.princeton.cs.algs4.Picture;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class SeamCarver {
-    //    (i, j)      (width, height)
-    //    (0, 0)  	  (1, 0)  	  (2, 0)
-    //    (0, 1)  	  (1, 1)  	  (2, 1)
-    //    (0, 2)  	  (1, 2)  	  (2, 2)
-    //    (0, 3)  	  (1, 3)  	  (2, 3)
-    //    width-->i  height-->j
+    //     (i, j)      (width, height)
+    //     (0, 0)  	  (1, 0)  	  (2, 0)
+    //     (0, 1)  	  (1, 1)  	  (2, 1)
+    //     (0, 2)  	  (1, 2)  	  (2, 2)
+    //     (0, 3)  	  (1, 3)  	  (2, 3)
+    //     width-->i  height-->j
     private Picture picture;
     private double[][] pictureEnergy;
     private boolean havenCalculateEnergy;
@@ -74,16 +74,20 @@ public class SeamCarver {
 
     // remove horizontal seam from picture
     public void removeHorizontalSeam(int[] seam) {
-        isIllegalArgument(seam, height());
+        isIllegalArgument(seam, width());
 
         picture = SeamRemover.removeHorizontalSeam(picture, seam);
+        pictureEnergy = new double[width()][height()];
+        havenCalculateEnergy = false;
     }
 
     // remove vertical seam from picture
     public void removeVerticalSeam(int[] seam) {
-        isIllegalArgument(seam, width());
+        isIllegalArgument(seam, height());
 
         picture = SeamRemover.removeVerticalSeam(picture, seam);
+        pictureEnergy = new double[width()][height()];
+        havenCalculateEnergy = false;
     }
 
     private void calculateEnergy() {
@@ -130,12 +134,12 @@ public class SeamCarver {
 
     private void isIllegalArgument(int[] seam, int length) {
         if (seam.length != length) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("seam's length is not equal length");
         }
 
         for (int i = 1; i < length; i++) {
             if (Math.abs(seam[i - 1] - seam[i]) > 1) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("abs than 1");
             }
         }
     }
