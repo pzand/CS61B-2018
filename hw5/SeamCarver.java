@@ -21,7 +21,7 @@ public class SeamCarver {
     }
 
     public Picture picture() {
-        return this.picture;
+        return new Picture(picture);
     }
 
     // width of current picture
@@ -171,7 +171,7 @@ public class SeamCarver {
             // dp[i][height - 1] = energy[i][height -1];
             // 初始化dp数组
             for (int i = 0; i < width(); i++) {
-                dp[i][height() - 1] = getEnergy(i, height() - 1);
+                dp[i][height() - 1] = pictureEnergy[i][height() - 1];
             }
             // 迭代求解
             for (int j = height() - 2; j >= 0; j--) {
@@ -183,7 +183,7 @@ public class SeamCarver {
                     };
                     int minEnergyIndex = getMinIndexForArray(chooseEnergy) + i - 1;
                     direction[i][j] = minEnergyIndex;
-                    dp[i][j] = getEnergy(i, j) + dp[minEnergyIndex][j + 1];
+                    dp[i][j] = pictureEnergy[i][j] + getEnergy(minEnergyIndex, j + 1);
                 }
             }
         }
@@ -204,7 +204,7 @@ public class SeamCarver {
             if (isOutOfBound(i, j)) {
                 return Integer.MAX_VALUE;
             }
-            return pictureEnergy[i][j];
+            return this.dp[i][j];
         }
 
         // 根据数组获取最小下标
