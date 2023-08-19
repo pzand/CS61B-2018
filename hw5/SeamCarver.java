@@ -19,7 +19,7 @@ public class SeamCarver {
     }
 
     private void initSeamCarver(Picture picture) {
-        this.picture = picture;
+        this.picture = new Picture(picture);
         havenCalculateEnergy = false;
         pictureEnergy = new double[width()][height()];
     }
