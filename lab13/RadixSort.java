@@ -100,27 +100,25 @@ public class RadixSort {
 
         // 统计数值
         int[] counting = new int[256 + 1];
-        for (int i = start; i < end;i++) {
+        for (int i = start; i < end; i++) {
             counting[charAtHelper(asciis[i], index)]++;
         }
 
-        // 确定排序后的位置。位置从零开始，因此实际需要加上start
+        // 确定排序后的位置。位置从零开始，因此实际需要加上start(即创建数组数量加一)
         int[] starts = new int[256 + 1];
         int pos = 0;
         // 优先级最高的，即该位置没有字符的
         starts[256] = pos;
         pos += counting[256];
-        for (int i = 0;i < 256;i++) {
+        // 剩余的字符
+        for (int i = 0; i < 256; i++) {
             starts[i] = pos;
             pos += counting[i];
         }
 
-        // 复制一个开始和结束的数组，用于递归
-        int[] starts1 = Arrays.copyOf(starts, starts.length);
-
-        //
+        // 排序数组
         String[] sorted = new String[end - start];
-        for (int i = start;i < end;i++) {
+        for (int i = start; i < end; i++) {
             int charNum = charAtHelper(asciis[i], index);
             sorted[starts[charNum]] = asciis[i];
             starts[charNum]++;
@@ -129,17 +127,17 @@ public class RadixSort {
         // 复制排序后的字符到原来的数组实现破坏性
         System.arraycopy(sorted, 0, asciis, start, sorted.length);
 
-        // 对于最后一个分区 手动递归，避免for循环越界
-        sortHelperMSD(asciis, start + starts1[255], end, index + 1);
-        sortHelperMSD(asciis, start, start + starts1[0], index + 1);
+        // 经过排序后start数组，变为end数组(即该位置是 该下标元素的末尾，下一个元素的下标)
+        // 对于特殊分区 手动递归
+        sortHelperMSD(asciis, start + starts[255], end + starts[0], index + 1);
         // 递归执行分区
-        for (int i = 0;i < 256 - 1;i++){
-            int s = start + starts1[i], e = start + starts1[i + 1];
-            // 避免因为分区的元素是相同的，导致无限递归。原因可能是递归条件没有判断index的问题
+        for (int i = 1; i < 256 - 1; i++) {
+            int s = start + starts[i - 1], e = start + starts[i];
+            // 如果分区的元素是相同的，则跳出递归，避免导致无限递归。原因可能是递归条件没有判断index的问题
             if (start == s && e == end) {
-                continue;
+                break;
             }
-            sortHelperMSD(asciis,s ,e, index + 1);
+            sortHelperMSD(asciis, s, e, index + 1);
         }
     }
 
