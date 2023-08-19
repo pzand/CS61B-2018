@@ -3,11 +3,12 @@ import edu.princeton.cs.algs4.Picture;
 import java.awt.*;
 
 public class SeamCarver {
+    //    (i, j)      (width, height)
     //    (0, 0)  	  (1, 0)  	  (2, 0)
     //    (0, 1)  	  (1, 1)  	  (2, 1)
     //    (0, 2)  	  (1, 2)  	  (2, 2)
     //    (0, 3)  	  (1, 3)  	  (2, 3)
-    // width-->j  height-->i
+    //    width-->i  height-->j
     private Picture picture;
     double[][] pictureEnergy;
     private boolean havenCalculateEnergy;
