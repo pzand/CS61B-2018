@@ -74,14 +74,14 @@ public class SeamCarver {
 
     // remove horizontal seam from picture
     public void removeHorizontalSeam(int[] seam) {
-        isIllegalArgument(seam, width());
+        isIllegalArgument(seam, height());
 
         picture = SeamRemover.removeHorizontalSeam(picture, seam);
     }
 
     // remove vertical seam from picture
     public void removeVerticalSeam(int[] seam) {
-        isIllegalArgument(seam, height());
+        isIllegalArgument(seam, width());
 
         picture = SeamRemover.removeVerticalSeam(picture, seam);
     }
