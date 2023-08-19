@@ -10,7 +10,7 @@ public class SeamCarver {
     //    (0, 3)  	  (1, 3)  	  (2, 3)
     //    width-->i  height-->j
     private Picture picture;
-    double[][] pictureEnergy;
+    private double[][] pictureEnergy;
     private boolean havenCalculateEnergy;
 
     // current picture
@@ -38,9 +38,9 @@ public class SeamCarver {
         isOutOfBound(x, y);
 
         if (pictureEnergy[x][y] == 0) {
-            int deltaX = getDeltaX(x, y);
-            int deltaY = getDeltaY(x, y);
-            pictureEnergy[x][y] = deltaX * deltaX + deltaY * deltaY;
+            int deltaSquareX = getDeltaX(x, y);
+            int deltaSquareY = getDeltaY(x, y);
+            pictureEnergy[x][y] = deltaSquareX + deltaSquareY;
         }
         return pictureEnergy[x][y];
     }
@@ -114,7 +114,7 @@ public class SeamCarver {
         int R = Math.abs(color1.getRed() - color2.getRed());
         int G = Math.abs(color1.getGreen() - color2.getGreen());
         int B = Math.abs(color1.getBlue() - color2.getBlue());
-        return R + G + B;
+        return R * R + G * G + B * B;
     }
 
     private void isOutOfBound(int i, int j) {
