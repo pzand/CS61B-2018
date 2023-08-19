@@ -15,13 +15,17 @@ public class SeamCarver {
 
     // current picture
     public SeamCarver(Picture picture) {
+        initSeamCarver(picture);
+    }
+
+    private void initSeamCarver(Picture picture) {
         this.picture = picture;
         havenCalculateEnergy = false;
         pictureEnergy = new double[width()][height()];
     }
 
     public Picture picture() {
-        return new Picture(picture);
+        return this.picture;
     }
 
     // width of current picture
@@ -76,18 +80,16 @@ public class SeamCarver {
     public void removeHorizontalSeam(int[] seam) {
         isIllegalArgument(seam, width());
 
-        picture = SeamRemover.removeHorizontalSeam(picture, seam);
-        pictureEnergy = new double[width()][height()];
-        havenCalculateEnergy = false;
+        Picture newPicture = SeamRemover.removeHorizontalSeam(picture, seam);
+        initSeamCarver(newPicture);
     }
 
     // remove vertical seam from picture
     public void removeVerticalSeam(int[] seam) {
         isIllegalArgument(seam, height());
 
-        picture = SeamRemover.removeVerticalSeam(picture, seam);
-        pictureEnergy = new double[width()][height()];
-        havenCalculateEnergy = false;
+        Picture newPicture = SeamRemover.removeVerticalSeam(picture, seam);
+        initSeamCarver(newPicture);
     }
 
     private void calculateEnergy() {
