@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.MaxPQ;
 import edu.princeton.cs.algs4.MinPQ;
 
 import java.io.Serializable;
@@ -6,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class BinaryTrie implements Serializable {
-    private Node root;
+    private final Node root;
 
     // the constructor should build a Huffman decoding trie according to frequency Table
     public BinaryTrie(Map<Character, Integer> frequencyTable) {
@@ -31,7 +30,7 @@ public class BinaryTrie implements Serializable {
         //用于记录前缀
         StringBuilder str = new StringBuilder();
         Node nodeTree = root;
-        for (int i = 0;i < querySequence.length();i++) {
+        for (int i = 0; i < querySequence.length(); i++) {
             if (nodeTree.isChar()) {
                 break;
             }
@@ -73,7 +72,7 @@ public class BinaryTrie implements Serializable {
         str.deleteCharAt(str.length() - 1);
     }
 
-    private static class Node implements Comparable<Node> {
+    private static class Node implements Comparable<Node>, Serializable {
         private final Character c;
         private final int frequent;
         private final Node left, right;
@@ -103,10 +102,6 @@ public class BinaryTrie implements Serializable {
 
         public Node getRight() {
             return right;
-        }
-
-        public boolean isLeaf() {
-            return left == null && right == null;
         }
 
         public boolean isChar() {
