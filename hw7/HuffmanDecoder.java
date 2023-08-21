@@ -27,14 +27,12 @@ public class HuffmanDecoder {
         BitSequence bitSequence = (BitSequence) object;
 
         // 解码
-        BitSequence last = bitSequence;
-        Match match;
         List<Character> decodingList = new LinkedList<>();
-        while (last.length() != 0) {
-            match = binaryTrie.longestPrefixMatch(last);
+        while (bitSequence.length() != 0) {
+            Match match = binaryTrie.longestPrefixMatch(bitSequence);
             decodingList.add(match.getSymbol());
 
-            last = last.allButFirstNBits(match.getSequence().length());
+            bitSequence = bitSequence.allButFirstNBits(match.getSequence().length());
         }
 
         // 输出
