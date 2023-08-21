@@ -30,7 +30,6 @@ public class HuffmanDecoder {
         BitSequence last = bitSequence;
         Match match;
         List<Character> decodingList = new LinkedList<>();
-        int j = 0;
         while (last.length() != 0) {
             match = binaryTrie.longestPrefixMatch(last);
             decodingList.add(match.getSymbol());
