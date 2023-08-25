@@ -144,10 +144,10 @@ public class Boggle {
     }
 
     private boolean isBoard(int x, int y) {
-        if (x < 0 || x >= width) {
+        if (x < 0 || x >= height) {
             return false;
         }
-        if (y < 0 || y >= height) {
+        if (y < 0 || y >= width) {
             return false;
         }
         return true;
