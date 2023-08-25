@@ -175,37 +175,45 @@ public class Boggle {
 
     private Position targetPosition(int x, int y, Direction direction) {
         switch (direction) {
-            case Top -> {
+            case Top : {
                 x += X[0];
                 y += Y[0];
+                break;
             }
-            case Down -> {
+            case Down : {
                 x += X[1];
                 y += Y[1];
+                break;
             }
-            case Left -> {
+            case Left : {
                 x += X[2];
                 y += Y[2];
+                break;
             }
-            case Right -> {
+            case Right : {
                 x += X[3];
                 y += Y[3];
+                break;
             }
-            case TopLeft -> {
+            case TopLeft : {
                 x += X[4];
                 y += Y[4];
+                break;
             }
-            case TopRight -> {
+            case TopRight : {
                 x += X[5];
                 y += Y[5];
+                break;
             }
-            case DownLeft -> {
+            case DownLeft : {
                 x += X[6];
                 y += Y[6];
+                break;
             }
-            case DownRight -> {
+            case DownRight : {
                 x += X[7];
                 y += Y[7];
+                break;
             }
         }
         return new Position(x, y);
