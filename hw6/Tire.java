@@ -3,14 +3,18 @@ import edu.princeton.cs.algs4.In;
 import java.util.*;
 
 public class Tire {
+    // 前缀树
     private Map<Character, Tire> wordTire;
+    // 当前位置是否是一个word
     private boolean isWord;
+    // 当前分支最长的word的长度
     public int longestLength;
     public Tire() {
         wordTire = new HashMap<>();
         this.isWord = false;
     }
 
+    // 根据in，构造前缀树
     public Tire(In in) {
         this();
         while (in.hasNextLine()) {
@@ -76,6 +80,7 @@ public class Tire {
         } );
     }
 
+    // 当前层含有的键
     public Set<Character> getLevelChar() {
         return wordTire.keySet();
     }
@@ -90,7 +95,8 @@ public class Tire {
         return wordTire.get(c);
     }
 
-    private Tire setCharacter(char c) {
+    // 设置当前层的一个分支，并返回该分支
+    private Tire setCharacter(char c)  {
         if (wordTire.containsKey(c)) {
             return wordTire.get(c);
         }
