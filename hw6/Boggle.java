@@ -16,6 +16,7 @@ public class Boggle {
     private Set<String> repeat;
     private StringBuilder strBuilder;
     private int k;
+    private int minLength;
     // Top, Down, Left, Right, TopLeft, TopRight, DownLeft, DownRight
     private final int[] X = {-1, 1, 0, 0, -1, -1, 1, 1};
     private final int[] Y = {0, 0, -1, 1, -1, 1, -1, 1};
@@ -42,6 +43,7 @@ public class Boggle {
 
     private List<String> solveHelper(int k, String boardFilePath) {
         this.k = k;
+        this.minLength = 0;
         heap = new MinPQ<>(k, (o1, o2) -> {
             if (o1.length() != o2.length()) {
                 return o1.length() - o2.length();
@@ -80,6 +82,10 @@ public class Boggle {
     }
 
     private void dfs(Tire tire, Position position) {
+        if (minLength > strBuilder.length() + tire.longestLength) {
+            return;
+        }
+
         if (tire.isWord()) {
             levelIsWord();
         }
@@ -110,7 +116,9 @@ public class Boggle {
         heap.insert(str);
 
         if (heap.size() > k) {
-            repeat.remove(heap.delMin());
+            String removeString = heap.delMin();
+            repeat.remove(removeString);
+            minLength = Math.max(minLength, removeString.length());
         }
 
     }
