@@ -5,6 +5,7 @@ import java.util.*;
 public class Tire {
     private Map<Character, Tire> wordTire;
     private boolean isWord;
+    public int longestLength;
     public Tire() {
         wordTire = new HashMap<>();
         this.isWord = false;
@@ -22,6 +23,7 @@ public class Tire {
     public void insertStringToTire(String str) {
         Tire tire = this;
         for (int i = 0;i < str.length();i++) {
+            tire.longestLength = Math.max(tire.longestLength, str.length() - 1);
             tire = tire.setCharacter(str.charAt(i));
         }
         tire.isWord = true;

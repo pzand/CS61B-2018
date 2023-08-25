@@ -16,6 +16,7 @@ public class Boggle {
     private Set<String> repeat;
     private StringBuilder strBuilder;
     private int k;
+    private int minLength;
     // Top, Down, Left, Right, TopLeft, TopRight, DownLeft, DownRight
     private final int[] X = {-1, 1, 0, 0, -1, -1, 1, 1};
     private final int[] Y = {0, 0, -1, 1, -1, 1, -1, 1};
@@ -49,6 +50,7 @@ public class Boggle {
                 return o2.compareTo(o1);
             }
         });
+        this.minLength = 0;
         repeat = new HashSet<>();
         strBuilder = new StringBuilder();
 
@@ -80,6 +82,10 @@ public class Boggle {
     }
 
     private void dfs(Tire tire, Position position) {
+        if (minLength > tire.longestLength + strBuilder.length()) {
+            return;
+        }
+
         if (tire.isWord()) {
             levelIsWord();
         }
@@ -110,7 +116,9 @@ public class Boggle {
         heap.insert(str);
 
         if (heap.size() > k) {
-            repeat.remove(heap.delMin());
+            String removeString = heap.delMin();
+            minLength = Math.max(minLength, removeString.length());
+            repeat.remove(removeString);
         }
 
     }
