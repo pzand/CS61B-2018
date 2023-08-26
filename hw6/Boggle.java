@@ -234,22 +234,22 @@ public class Boggle {
                 y += Y[3];
                 break;
             }
-            case TopLeft : {
+            case UpperLeft: {
                 x += X[4];
                 y += Y[4];
                 break;
             }
-            case TopRight : {
+            case UpperRight: {
                 x += X[5];
                 y += Y[5];
                 break;
             }
-            case DownLeft : {
+            case LowerLeft: {
                 x += X[6];
                 y += Y[6];
                 break;
             }
-            case DownRight : {
+            case LowerRight: {
                 x += X[7];
                 y += Y[7];
                 break;
