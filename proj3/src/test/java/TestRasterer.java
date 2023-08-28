@@ -47,6 +47,18 @@ public class TestRasterer {
         }
     }
 
+    @Test
+    public void testEdgeRaster() {
+        Map<String, Double> params = new HashMap<>();
+        params.put("ullon", -123.2558);
+        params.put("ullat", 37.846094782003604);
+        params.put("lrlon", -122.27783203125);
+        params.put("lrlat", 37.84560520035915);
+        params.put("w", 1500.0);
+        params.put("h", 461.0);
+        rasterer.getMapRaster(params);
+    }
+
     private List<Map<String, Double>> paramsFromFile() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
         List<Map<String, Double>> testParams = new ArrayList<>();
