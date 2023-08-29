@@ -18,10 +18,10 @@ public class Rasterer {
     private final static int SL = 288200;
     private final double D0_RESOLUTION;
     private int depth;
-    private double raster_ullon;
-    private double raster_ullat;
-    private double raster_lrlon;
-    private double raster_lrlat;
+    private double raster_ul_lon;
+    private double raster_ul_lat;
+    private double raster_lr_lon;
+    private double raster_lr_lat;
     private boolean query_success;
     private String[][] grid;
 
@@ -31,14 +31,9 @@ public class Rasterer {
         D0_RESOLUTION = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) * SL / MapServer.TILE_SIZE;
     }
 
+    // 初始化
     private void init() {
-        this.depth = 0;
-        this.raster_lrlat = 0.0;
-        this.raster_ullat = 0.0;
-        this.raster_lrlon = 0.0;
-        this.raster_ullon = 0.0;
         query_success = false;
-        grid = null;
     }
 
     /**
@@ -71,8 +66,6 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         // System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-//        System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
-//                + "your browser.");
 
         init();
         double ullon = params.get("ullon");
@@ -82,8 +75,7 @@ public class Rasterer {
         double w = params.get("w");
         double h = params.get("h");
 
-        lonDPP = (lrlon - ullon) / w * SL;
-
+        lonDPP = computeLonDPP(ullon, lrlon, w);
         depth = computeDepth();
         Map<String, Integer> position = actualPosition(ullon, ullat, lrlon, lrlat);
 
@@ -93,24 +85,25 @@ public class Rasterer {
             int leftXPosition = position.get("leftXPosition");
             int upperYPosition = position.get("upperYPosition");
 
-            raster_lrlon = MapServer.ROOT_ULLON + rightXPosition * scaleX;
-            raster_ullon = MapServer.ROOT_ULLON + leftXPosition * scaleX;
-            raster_lrlat = MapServer.ROOT_LRLAT + lowerYPosition * scaleY;
-            raster_ullat = MapServer.ROOT_LRLAT + upperYPosition * scaleY;
+            raster_lr_lon = MapServer.ROOT_ULLON + rightXPosition * scaleX;
+            raster_ul_lon = MapServer.ROOT_ULLON + leftXPosition * scaleX;
+            raster_lr_lat = MapServer.ROOT_LRLAT + lowerYPosition * scaleY;
+            raster_ul_lat = MapServer.ROOT_LRLAT + upperYPosition * scaleY;
             grid = getGrid(leftXPosition, rightXPosition, lowerYPosition, upperYPosition);
             query_success = true;
         }
 
         results.put("depth", depth);
         results.put("render_grid", grid);
-        results.put("raster_ul_lon", raster_ullon);
-        results.put("raster_ul_lat", raster_ullat);
-        results.put("raster_lr_lon", raster_lrlon);
-        results.put("raster_lr_lat", raster_lrlat);
+        results.put("raster_ul_lon", raster_ul_lon);
+        results.put("raster_ul_lat", raster_ul_lat);
+        results.put("raster_lr_lon", raster_lr_lon);
+        results.put("raster_lr_lat", raster_lr_lat);
         results.put("query_success", query_success);
         return results;
     }
 
+    // 判断求出来的位置是否合法
     private boolean validPosition(Map<String, Integer> position) {
         if (position.get("leftXPosition") >= position.get("rightXPosition")) {
             return false;
@@ -121,8 +114,10 @@ public class Rasterer {
         return true;
     }
 
+    // 根据需求的经纬度，获取对应的位置
+    // leftXPosition，rightXPosition，upperYPosition，lowerYPosition
     private Map<String, Integer> actualPosition(double ullon, double ullat, double lrlon, double lrlat) {
-        // 该深度每张图片的经度比例 = (初始右边经度 - 初始左边进度) / sum(划分份数)，其中份数为2^depth
+        // 该深度每张图片的经度比例 = (初始右边经度 - 初始左边进度) / sum(划分份数)
         // 单位：经度每张图
         // 理想的位置 * 比例 + 初始左侧经度 = 需要的经度 -> 理想位置 = (需求经度 - 初始经度) / 比例
         // 理想的位置 * 比例 + 初始下侧纬度 = 需要的纬度 -> 理想位置 = (需求经度 - 初始经度) / 比例
@@ -150,6 +145,7 @@ public class Rasterer {
         return map;
     }
 
+    // 把越界的位置信息，归回到界限中
     private int handleOutOfBound(int position) {
         if (position < 0) {
             return 0;
@@ -157,6 +153,12 @@ public class Rasterer {
         return Math.min(position, sumPicture);
     }
 
+    // 计算LonDPP
+    private double computeLonDPP(double ullon, double lrlon, double width) {
+        return (lrlon - ullon) / width * SL;
+    }
+
+    // 根据LonDPP，计算需要的深度D
     private int computeDepth() {
         // 对于第一层D0 其比例尺为，(-122.2339 + 122.256) * 288200 / 256 = 98.94 英尺每像素
         // 其中，288200为(经度转为英寸的比例常数)，256为(图片的像素). 下一层为98.94 / 2 = 49.47，以此类推
@@ -174,6 +176,7 @@ public class Rasterer {
         return actualDepth;
     }
 
+    // 根据位置，获取文件名
     private String[][] getGrid(int leftX, int rightX, int lowerY, int upperY) {
         String prefix = "d" + depth + "_x";
         int subX = rightX - leftX;
