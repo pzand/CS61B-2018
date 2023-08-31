@@ -7,6 +7,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
+    private TreeMap<Long, Node> graph = new TreeMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -58,6 +64,11 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        graph.values().forEach((value) -> {
+            if (!value.getAdjacent().iterator().hasNext()) {
+
+            }
+        });
     }
 
     /**
@@ -75,7 +86,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return graph.get(v).getAdjacent();
     }
 
     /**
@@ -136,7 +147,18 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        Node thisNode = new Node(lon, lat, 0);
+
+        AtomicLong closestId = new AtomicLong();
+        AtomicReference<Double> closestLen = new AtomicReference<>(Double.MAX_VALUE);
+        graph.values().forEach( (value) -> {
+            double distance = computeDistance(value, thisNode);
+            if (closestLen.get() < distance) {
+                closestId.set(value.getId());
+                closestLen.set(distance);
+            }
+        });
+        return closestId.get();
     }
 
     /**
@@ -145,7 +167,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return graph.get(v).getLon();
     }
 
     /**
@@ -154,6 +176,62 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return graph.get(v).getLat();
+    }
+
+    void addNode(long v, double lon, double lat) {
+        Node node = new Node(lon, lat, v);
+        graph.put(v, node);
+    }
+
+    void removeNode(long v) {
+        graph.remove(v);
+    }
+
+    void addEdge(long v1, long v2) {
+        Node n1 = graph.get(v1);
+        Node n2 = graph.get(v2);
+        n1.setAdjacent(n2.getId());
+        n2.setAdjacent(n1.getId());
+    }
+
+    private double computeDistance(Node node1, Node node2) {
+        double dLon = node1.getLon() - node2.getLon();
+        double dLat = node1.getLat() - node2.getLat();
+        return Math.sqrt(dLon * dLon + dLat * dLat);
+    }
+
+    public static class Node {
+        private final double lon;
+        private final double lat;
+        private final long id;
+        LinkedList<Long> adjacent;
+
+        public Node(double lon, double lat, long id) {
+            this.lon = lon;
+            this.lat = lat;
+            this.id = id;
+            adjacent = new LinkedList<>();
+        }
+
+        public double getLon() {
+            return lon;
+        }
+
+        public double getLat() {
+            return lat;
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setAdjacent(long v) {
+            adjacent.add(v);
+        }
+
+        public Iterable<Long> getAdjacent() {
+            return adjacent;
+        }
     }
 }
