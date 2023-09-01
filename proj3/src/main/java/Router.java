@@ -31,7 +31,6 @@ public class Router {
 
         // 用于优化，把不是最优的排除
         Map<Long, Double> map = new HashMap<>();
-        Set<Long> set = new HashSet<>();
         PriorityQueue<NodeMap> heap = new PriorityQueue<>();
 
         // 初始化堆，填入一个初始状态
@@ -42,24 +41,14 @@ public class Router {
         map.put(start, 0.0);
 
         nodeMap = heap.remove();
-        set.add(nodeMap.getId());
         while (nodeMap.getId() != destination) {
-            // 拿出一个权重最小的节点，
-            // 与hw4的优化不同，因为 该节点到终点的ed是一样的，
-            // 所以只考虑d。因为其被堆中移除，所以d是最小的
-//            set.add(nodeMap.getId());
-
-
             // 把其邻居加入其中
             for (long neighborId : g.adjacent(nodeMap.getId())) {
                 double d = nodeMap.getDistance();
                 ed = g.distance(nodeMap.getId(), neighborId);
                 h = g.distance(neighborId, destination);
 
-//                if (set.contains(neighborId)) {
-//                    continue;
-//                }
-                if (map.containsKey(neighborId) && map.get(neighborId) <= d) {
+                if (map.containsKey(neighborId) && map.get(neighborId) <= d + ed) {
                     continue;
                 }
 
@@ -69,9 +58,7 @@ public class Router {
             }
 
             nodeMap = heap.remove();
-//            set.add(nodeMap.getId());
         }
-
         // 将节点转为list
         return getPath(nodeMap); // FIXME
     }
@@ -127,7 +114,7 @@ public class Router {
                 throw new IllegalArgumentException("the class is not equal");
             }
             NodeMap n = (NodeMap) o;
-            return (int) (this.getPriority() - n.getPriority());
+            return Double.compare(this.getPriority(), n.getPriority());
         }
 
         @Override
