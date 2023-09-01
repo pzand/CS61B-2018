@@ -40,6 +40,8 @@ public class TestRouter {
                     params.get("start_lon"), params.get("start_lat"),
                     params.get("end_lon"), params.get("end_lat"));
             List<Long> expected = expectedResults.get(i);
+            System.out.println(expected.size());
+            System.out.println(actual.size());
             assertEquals("Your results did not match the expected results", expected, actual);
         }
     }
