@@ -6,10 +6,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-    private TreeMap<Long, Node> graph = new TreeMap<>();
+    private HashMap<Long, Node> graph = new HashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -64,10 +61,14 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        List<Long> removeList = new LinkedList<>();
         graph.values().forEach((value) -> {
-            if (!value.getAdjacent().iterator().hasNext()) {
-
+            if (!value.haveAdjacent()) {
+                removeList.add(value.getId());
             }
+        });
+        removeList.forEach((id) -> {
+            graph.remove(id);
         });
     }
 
@@ -77,7 +78,7 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return graph.keySet();
     }
 
     /**
@@ -147,13 +148,11 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        Node thisNode = new Node(lon, lat, 0);
-
         AtomicLong closestId = new AtomicLong();
         AtomicReference<Double> closestLen = new AtomicReference<>(Double.MAX_VALUE);
         graph.values().forEach( (value) -> {
-            double distance = computeDistance(value, thisNode);
-            if (closestLen.get() < distance) {
+            double distance = distance(value.getLon(), value.getLat(), lon, lat);
+            if (closestLen.get() > distance) {
                 closestId.set(value.getId());
                 closestLen.set(distance);
             }
@@ -180,12 +179,12 @@ public class GraphDB {
     }
 
     void addNode(long v, double lon, double lat) {
-        Node node = new Node(lon, lat, v);
+        Node node = new Node(v, lon, lat);
         graph.put(v, node);
     }
 
-    void removeNode(long v) {
-        graph.remove(v);
+    void setInformation(long v, String name, String value) {
+        graph.get(v).setInformation(name, value);
     }
 
     void addEdge(long v1, long v2) {
@@ -193,45 +192,5 @@ public class GraphDB {
         Node n2 = graph.get(v2);
         n1.setAdjacent(n2.getId());
         n2.setAdjacent(n1.getId());
-    }
-
-    private double computeDistance(Node node1, Node node2) {
-        double dLon = node1.getLon() - node2.getLon();
-        double dLat = node1.getLat() - node2.getLat();
-        return Math.sqrt(dLon * dLon + dLat * dLat);
-    }
-
-    public static class Node {
-        private final double lon;
-        private final double lat;
-        private final long id;
-        LinkedList<Long> adjacent;
-
-        public Node(double lon, double lat, long id) {
-            this.lon = lon;
-            this.lat = lat;
-            this.id = id;
-            adjacent = new LinkedList<>();
-        }
-
-        public double getLon() {
-            return lon;
-        }
-
-        public double getLat() {
-            return lat;
-        }
-
-        public long getId() {
-            return id;
-        }
-
-        public void setAdjacent(long v) {
-            adjacent.add(v);
-        }
-
-        public Iterable<Long> getAdjacent() {
-            return adjacent;
-        }
     }
 }
