@@ -38,10 +38,10 @@ public class Router {
         double h = g.distance(start, destination);
         NodeMap nodeMap = new NodeMap(start, null, 0.0, ed + h);
         heap.add(nodeMap);
-        map.put(start, 0.0);
+        map.put(start, 0.0 + ed);
 
-        nodeMap = heap.remove();
         while (nodeMap.getId() != destination) {
+        nodeMap = heap.remove();
             // 把其邻居加入其中
             for (long neighborId : g.adjacent(nodeMap.getId())) {
                 double d = nodeMap.getDistance();
@@ -57,7 +57,7 @@ public class Router {
                 map.put(n.getId(), d + ed);
             }
 
-            nodeMap = heap.remove();
+//            nodeMap = heap.remove();
         }
         // 将节点转为list
         return getPath(nodeMap); // FIXME
