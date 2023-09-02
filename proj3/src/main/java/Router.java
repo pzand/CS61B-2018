@@ -41,7 +41,6 @@ public class Router {
         map.put(start, 0.0 + ed);
 
         while (nodeMap.getId() != destination) {
-        nodeMap = heap.remove();
             // 把其邻居加入其中
             for (long neighborId : g.adjacent(nodeMap.getId())) {
                 double d = nodeMap.getDistance();
@@ -57,7 +56,12 @@ public class Router {
                 map.put(n.getId(), d + ed);
             }
 
-//            nodeMap = heap.remove();
+            // 意味着找不到路
+            if (heap.isEmpty()) {
+                return new LinkedList<>();
+            }
+
+            nodeMap = heap.remove();
         }
         // 将节点转为list
         return getPath(nodeMap); // FIXME
