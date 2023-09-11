@@ -147,11 +147,189 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        List<NavigationDirection> navigationDirections = new LinkedList<>();
-
-        return null; // FIXME
+        RouteDirectionHelper rdh = new RouteDirectionHelper(g, route);
+        return rdh.solve(); // FIXME
     }
 
+    private static class RouteDirectionHelper {
+        private final GraphDB g;
+        private final List<Long> route;
+        // 划分后的道路
+        private List<List<Long>> list;
+        // 划分后的道路名字
+        private List<String> roadName;
+
+        public RouteDirectionHelper(GraphDB g, List<Long> route) {
+            this.g = g;
+            this.route = route;
+            this.list = new LinkedList<>();
+            this.roadName = new LinkedList<>();
+        }
+
+        // 求解实际的
+        public List<NavigationDirection> solve() {
+            List<NavigationDirection> routeDirections = new LinkedList<>();
+
+            divideRode();
+
+            // 根据划分，计算distance并添加名字
+            Iterator<String> name = roadName.iterator();
+            for (List<Long> road : list) {
+                NavigationDirection navigationDirection = new NavigationDirection();
+                navigationDirection.distance = computeDistance(road);
+                navigationDirection.way = name.next();
+
+                routeDirections.add(navigationDirection);
+            }
+
+            // 计算bearing，需要上一个道路最后的两节点 和 该道路的最开始两节点
+            // 其中最后节点和最开始节点是同一个节点
+            Iterator<NavigationDirection> navigationDirection = routeDirections.iterator();
+            Iterator<List<Long>> road = list.iterator();
+
+            // 初始化最开始的NavigationDirection
+            NavigationDirection navDir = navigationDirection.next();
+            navDir.direction = NavigationDirection.START;
+            List<Long> currentRoad = road.next();
+            double previousBearing = g.bearing(currentRoad.get(currentRoad.size() - 2), currentRoad.get(currentRoad.size() - 1));
+
+            while (navigationDirection.hasNext()) {
+                currentRoad = road.next();
+                navDir = navigationDirection.next();
+
+                // 下一个节点的相对方向
+                double currentBearing = g.bearing(currentRoad.get(0), currentRoad.get(1));
+
+                // 获取实际转向
+                double sub = (currentBearing - previousBearing);
+                sub += (currentBearing - previousBearing) <= -180 ? 360 : 0;
+                sub += (currentBearing - previousBearing) >= 180 ? -360 : 0;
+
+                navDir.direction = bearingToDirection(sub);
+                // 上一个节点的相对方向
+                previousBearing = g.bearing(currentRoad.get(currentRoad.size() - 2), currentRoad.get(currentRoad.size() - 1));
+            }
+            return routeDirections;
+        }
+
+        // 划分道路
+        // 并未通过测试5，不知为什么选择43rd Street道路，已经放弃修复。FIXME
+        private void divideRode() {
+            // 道路迭代器
+            Iterator<Long> routeIterator = route.iterator();
+            List<Long> road;
+
+            // previousNode前一个节点， thisNode当前节点
+            long previousNode = routeIterator.next();
+            long thisNode = routeIterator.next();
+
+            // 初始化第一次情况
+            road = new LinkedList<>();
+            String name = commonName(previousNode, thisNode);
+            roadName.add(name);
+            road.add(previousNode);
+            road.add(thisNode);
+            previousNode = thisNode;
+
+            while (routeIterator.hasNext()) {
+                thisNode = routeIterator.next();
+
+                // 如果该节点有该道路名字，则添加到road。否则进行划分
+                Set<String> nodeName = g.getRoadName(thisNode);
+                if (nodeName.contains(name)) {
+                    road.add(thisNode);
+                } else {
+                    // 添加到list中，进行划分
+                    list.add(road);
+
+                    // 初始化，寻找下一个最长的道路名字，并添加岔路节点和下一节点到road中
+                    road = new LinkedList<>();
+                    name = commonName(previousNode, thisNode);
+                    roadName.add(name);
+                    road.add(previousNode);
+                    road.add(thisNode);
+                }
+
+                previousNode = thisNode;
+            }
+
+            // 把最后的road添加到其中
+            list.add(road);
+        }
+
+        // 根据节点v和节点w，找到 最长的 共同的道路name。
+        // 在寻找中，可能会全部移除，FIXME
+        private String commonName(long v, long w) {
+            Set<String> commonRoadName = new HashSet<>();
+
+            // 根据节点v和节点w，找到共同的道路name
+            Set<String> wRoadName = g.getRoadName(w);
+            for (String s : g.getRoadName(v)) {
+                if (wRoadName.contains(s)) {
+                    commonRoadName.add(s);
+                }
+            }
+
+            // 将route迭代器移到节点w的位置
+            Iterator<Long> routeIterator = route.iterator();
+            while (routeIterator.hasNext()) {
+                if (routeIterator.next() == w) {
+                    break;
+                }
+            }
+
+            // 根据筛选出来的道路名字，接着往下寻找。寻找最长的道路名字
+            while (commonRoadName.size() > 1) {
+                Iterator<String> crnIterator = commonRoadName.iterator();
+                Set<String> road = g.getRoadName(routeIterator.next());
+
+                while (crnIterator.hasNext()) {
+                    if (!road.contains(crnIterator.next())) {
+                        crnIterator.remove();
+                    }
+                }
+            }
+
+            // 实际可能会全部移除
+            if (commonRoadName.size() == 1) {
+                return commonRoadName.iterator().next();
+            }
+
+            throw new IllegalArgumentException("have not same name, node: " + v + "," + w);
+        }
+
+        // 根据list的节点，计算长度
+        private double computeDistance(List<Long> road) {
+            double thisRodeDistance = 0;
+
+            long beforeNode = road.get(0);
+            for (long node : road) {
+                thisRodeDistance += g.distance(beforeNode, node);
+                beforeNode = node;
+            }
+            return thisRodeDistance;
+        }
+
+        // 将bearing转为 NavigationDirection的具体方向
+        private int bearingToDirection(double bearing) {
+            if (bearing < -100) {
+                return NavigationDirection.SHARP_LEFT;
+            } else if (bearing < -30) {
+                return NavigationDirection.LEFT;
+            } else if (bearing < -15) {
+                return NavigationDirection.SLIGHT_LEFT;
+            } else if (bearing <= 15) {
+                return NavigationDirection.STRAIGHT;
+            } else if (bearing <= 30) {
+                return NavigationDirection.SLIGHT_RIGHT;
+            } else if (bearing <= 100) {
+                return NavigationDirection.RIGHT;
+            } else {
+                return NavigationDirection.SHARP_RIGHT;
+            }
+        }
+
+    }
 
     /**
      * Class to represent a navigation direction, which consists of 3 attributes:
