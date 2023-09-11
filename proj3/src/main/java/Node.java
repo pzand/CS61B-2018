@@ -1,13 +1,12 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class Node {
     private final double lon;
     private final double lat;
     private final long id;
-    LinkedList<Long> adjacent;
-    Map<String, String> otherInformation;
+    private LinkedList<Long> adjacent;
+    private Map<String, String> otherInformation;
+    private Set<String> roadName;
 
     public Node(long id, double lon, double lat) {
         this.lon = lon;
@@ -15,6 +14,7 @@ public class Node {
         this.id = id;
         adjacent = new LinkedList<>();
         otherInformation = new HashMap<>();
+        roadName = new HashSet<>();
     }
 
     public double getLon() {
@@ -38,6 +38,13 @@ public class Node {
     }
     public void setInformation(String name, String value) {
         otherInformation.put(name, value);
+    }
+    public void setRoadName(String name) {
+        roadName.add(name);
+    }
+
+    public Set<String> roadName() {
+        return new HashSet<>(roadName);
     }
 
     public Iterable<Long> getAdjacent() {

@@ -87,7 +87,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return graph.get(v).getAdjacent();
+        return getNode(v).getAdjacent();
     }
 
     /**
@@ -166,7 +166,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return graph.get(v).getLon();
+        return getNode(v).getLon();
     }
 
     /**
@@ -175,7 +175,7 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return graph.get(v).getLat();
+        return getNode(v).getLat();
     }
 
     void addNode(long v, double lon, double lat) {
@@ -183,13 +183,25 @@ public class GraphDB {
         graph.put(v, node);
     }
 
+    private Node getNode(long v) {
+        return graph.get(v);
+    }
+
     void setInformation(long v, String name, String value) {
-        graph.get(v).setInformation(name, value);
+        if (name.equals("roadName")) {
+            getNode(v).setRoadName(value);
+        } else {
+            getNode(v).setInformation(name, value);
+        }
+    }
+
+    Set<String> getRoadName(long v) {
+        return getNode(v).roadName();
     }
 
     void addEdge(long v1, long v2) {
-        Node n1 = graph.get(v1);
-        Node n2 = graph.get(v2);
+        Node n1 = getNode(v1);
+        Node n2 = getNode(v2);
         n1.setAdjacent(n2.getId());
         n2.setAdjacent(n1.getId());
     }
