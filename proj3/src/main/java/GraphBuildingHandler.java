@@ -42,6 +42,8 @@ public class GraphBuildingHandler extends DefaultHandler {
     private final LinkedList<Long> ways;
     private boolean isHighWay;
     private long prefixId;
+    private String roadName;
+    private String roadId;
 
     /**
      * Create a new GraphBuildingHandler.
@@ -90,6 +92,8 @@ public class GraphBuildingHandler extends DefaultHandler {
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
+            this.roadId = attributes.getValue("id");
+//            System.out.println(attributes.getValue("id"));
 //            System.out.println("Beginning a way...");
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
@@ -121,6 +125,7 @@ public class GraphBuildingHandler extends DefaultHandler {
 
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+                roadName = v;
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -159,12 +164,17 @@ public class GraphBuildingHandler extends DefaultHandler {
                 return;
             }
 
+            ways.forEach((id) -> g.setInformation(id, "roadName", roadName));
+
+            // 1 connect 2，2 connect 3，3 connect 4
             long node1 = ways.removeFirst();
             while (!ways.isEmpty()) {
                 long node2 = ways.removeFirst();
                 g.addEdge(node1, node2);
                 node1 = node2;
             }
+
+            roadName = "";
             isHighWay = false;
         }
     }
